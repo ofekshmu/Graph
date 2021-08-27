@@ -1,28 +1,28 @@
 
 class Graph:
     
-    def __Init__(graph : dict = {}, vertices : list = [], edges : list = [], Debug : bool = False):
+    def __Init__(self, graph : dict = {}, vertices : list = [], edges : list = [], Debug : bool = False):
         self.graph = graph
         self.debug = False
 
-    def addEdge(e : tuple):
-        pass
+    def addEdge(self, e : tuple):
+        self.graph[]
 
-    def addVertice(v):
+    def addVertice(self, v):
         pass
     
-    def exists():
+    def exists(self):
         pass
 
-    def getVertices():
+    def getVertices(self):
         pass
 
-    def getEdges():
+    def getEdges(self):
         pass
 
-    def getNeighboors(v):
+    def getNeighboors(self, v):
         pass
 
-    def __repr__():
+    def __repr__(דקךכ):
         """ TODO """
         return ""
