@@ -39,21 +39,26 @@ class Graph:
             self.graph[v] = []
         
     
-    def exists(self):
-        pass
+    def exists(self, value):
+        if value.isinstance(Edge):
+            NotImplemented()
+        else:
+            if value in self.graph.keys():
+                return True
+        return False 
 
     def getVertices(self):
-        pass
+        """@returns a list of the vertices in the graph """
+        return list(self.graph.values())
 
     def getEdges(self):
-        pass
+        NotImplemented()
 
     def getNeighboors(self, v):
-        pass
+        NotImplemented()
 
-    def setDebugMode(self, state : boolean = True):
+    def setDebugMode(self, state : bool = True):
         self.debug = state
 
     def __repr__(self):
-        """ TODO """
-        return ""
+        NotImplemented()
