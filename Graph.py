@@ -1,7 +1,4 @@
-
-from typing import Optional
 from Edge import Edge
-
 
 class Graph:
     
@@ -26,13 +23,12 @@ class Graph:
         """
         cond_e = e.end in self.graph.keys()
         cond_s = e.start in self.graph.keys()
-        if self.debug:
-            if force and not cond_e or not cond_s:
-                print(f"{e} was forced")  
-            if self.debug and not cond_e:
-                print(f"End of edge {e} does not exist in graph")
-            if self.debug and not cond_s:
-                print(f"Start of edge {e} does not exist in graph")
+        if force and not cond_e or not cond_s:
+            self.debuger("addEdge",f"{e} was forced")  
+        if self.debug and not cond_e:
+            self.debuger("addEdge",f"End of edge {e} does not exist in graph")
+        if self.debug and not cond_s:
+            self.debuger("addEdge",f"Start of edge {e} does not exist in graph")
 
         if force or cond_s and cond_e:
             self.graph.__setitem__(e.start, e.end); 
@@ -42,12 +38,12 @@ class Graph:
     def addVertice(self, v):
         """ Adds a new vertice @v to the graph """
         if v in self.graph.keys():
-            if self.debug: print(f"{v} is already a vertice in the graph.")
+            self.debuger("addVertice",f"{v} is already a vertice in the graph.")
         else:
             self.graph[v] = []
         
     
-    def exists(self, value : Optional[Edge]):
+    def exists(self, value):
         """
         Receives either a vertices or an Edge and returns True
         if is present in graph, False otherwise.
@@ -78,12 +74,16 @@ class Graph:
         if self.exists(v):
             return self.graph[v]
         else:
-            print(f"Vertice {v} does not exist.\nNo list returned.")
+            self.debuger("getNeighboors",f"Vertice {v} does not exist.\nNo list returned.")
             raise RuntimeWarning
 
 
     def setDebugMode(self, state : bool = True):
         self.debug = state
+
+    def debuger(self, function :str, message :str):
+        if self.debug: 
+            print(10*'-',f" Message in function: {function} ",10*'-',"\n",message)
 
     def __repr__(self):
         string = "Graph Preview:\n"
