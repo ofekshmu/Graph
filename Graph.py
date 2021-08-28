@@ -31,10 +31,7 @@ class Graph:
                 self.addVertice(e.start)
                 self.debuger("addEdge",f"Start of edge {e} was forced")
 
-        if force and (not cond_e or not cond_s):
-            self.debuger("addEdge",f"Edge {e} was forced")  
-
-        if cond_e and cond_s or force:
+        if (cond_e and cond_s) or force:
             self.graph[e.start].append(e.end)
             return True
             
