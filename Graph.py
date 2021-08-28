@@ -2,7 +2,7 @@ from Edge import Edge
 
 class Graph:
     
-    def __init__(self, vertices : list = [], edges : list = [], debug : bool = False):
+    def __init__(self, vertices : list = [], edges : list = [], direction :bool = False, debug : bool = False):
         self.graph = {}
         self.debug = debug
 
