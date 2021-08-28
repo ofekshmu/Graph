@@ -2,9 +2,10 @@ from Edge import Edge
 
 class Graph:
     
-    def __init__(self, vertices : list = [], edges : list = [], direction :bool = False, debug : bool = False):
+    def __init__(self, vertices : list = [], edges : list = [], duplicates :bool = False, debug : bool = False):
         self.graph = {}
         self.debug = debug
+        self.duplicates = duplicates
 
         for v in vertices:
             self.addVertice(v)
@@ -22,19 +23,18 @@ class Graph:
         """
         cond_e = e.end in self.graph.keys()
         cond_s = e.start in self.graph.keys()
+        if self.__shouldAdd(e):
+            if force:
+                if not cond_e:
+                    self.addVertice(e.end)
+                    self.debuger("addEdge",f"End of edge {e} was forced")
+                if not cond_s:
+                    self.addVertice(e.start)
+                    self.debuger("addEdge",f"Start of edge {e} was forced")
 
-        if force:
-            if not cond_e:
-                self.addVertice(e.end)
-                self.debuger("addEdge",f"End of edge {e} was forced")
-            if not cond_s:
-                self.addVertice(e.start)
-                self.debuger("addEdge",f"Start of edge {e} was forced")
-
-        if (cond_e and cond_s) or force:
-            self.graph[e.start].append(e.end)
-            return True
-            
+            if (cond_e and cond_s) or force:
+                self.graph[e.start].append(e.end)
+                return True
         return False
 
     def addVertice(self, v):
@@ -60,6 +60,9 @@ class Graph:
             if value in self.graph.keys():
                 return True
         return False 
+
+    def __shouldAdd(self, value):
+        return self.duplicates or (not self.exists(value))
 
     def getVertices(self):
         """@returns a list of the vertices in the graph """
@@ -99,7 +102,7 @@ class Graph:
 
 
 #some tests for the time being:
-g = Graph(debug=True)
+g = Graph(debug=True, duplicates=True)
 print(g)
 g.addVertice(1)
 print(g.exists(1))
@@ -108,6 +111,8 @@ g.addEdge(Edge(1,2),force=True)
 g.addEdge(Edge(1,3),force=True)
 print(g.exists(Edge(1,2)))
 g.addEdge(Edge(5,6),force=True)
+g.addEdge(Edge(5,6),force=True)
+
 print(g.getNeighboors(5))
 #print(g.getNeighboors(1))
 print(g)
