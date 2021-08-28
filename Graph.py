@@ -4,14 +4,13 @@ class Graph:
     
     def __init__(self, vertices : list = [], edges : list = [], debug : bool = False):
         self.graph = {}
-        
+        self.debug = debug
+
         for v in vertices:
             self.addVertice(v)
         for e in edges:
             self.addEdge(e, force = True)
         
-        self.debug = debug
-
     def addEdge(self, e : Edge, force : bool = False):
         """ 
         Adds a new Edge @e to the graph
@@ -32,7 +31,7 @@ class Graph:
                 self.addVertice(e.start)
                 self.debuger("addEdge",f"Start of edge {e} was forced")
 
-        if force and not cond_e or not cond_s:
+        if force and (not cond_e or not cond_s):
             self.debuger("addEdge",f"Edge {e} was forced")  
 
         if cond_e and cond_s or force:
@@ -111,9 +110,10 @@ g.addEdge(Edge(1,2))
 g.addEdge(Edge(1,2),force=True)
 g.addEdge(Edge(1,3),force=True)
 print(g.exists(Edge(1,2)))
-g.addEdge(Edge(5,6))
+g.addEdge(Edge(5,6),force=True)
 print(g.getNeighboors(5))
-print(g.getNeighboors(1))
-print(g.getNeighboors(1))
-
+#print(g.getNeighboors(1))
 print(g)
+
+g2 = Graph(vertices=[1,2,5,7,23],edges=[Edge(1,2),Edge(5,7),Edge(10,1),Edge(20,25)])
+print(g2)
