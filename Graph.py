@@ -2,7 +2,7 @@ from Edge import Edge
 
 class Graph:
     
-    def __Init__(self, vertices : list = [], edges : list = [], debug : bool = False):
+    def __init__(self, vertices : list = [], edges : list = [], debug : bool = False):
         self.graph = {}
         
         for v in vertices:
@@ -23,16 +23,22 @@ class Graph:
         """
         cond_e = e.end in self.graph.keys()
         cond_s = e.start in self.graph.keys()
-        if force and not cond_e or not cond_s:
-            self.debuger("addEdge",f"{e} was forced")  
-        if self.debug and not cond_e:
-            self.debuger("addEdge",f"End of edge {e} does not exist in graph")
-        if self.debug and not cond_s:
-            self.debuger("addEdge",f"Start of edge {e} does not exist in graph")
 
-        if force or cond_s and cond_e:
-            self.graph.__setitem__(e.start, e.end); 
+        if force:
+            if not cond_e:
+                self.addVertice(e.end)
+                self.debuger("addEdge",f"End of edge {e} was forced")
+            if not cond_s:
+                self.addVertice(e.start)
+                self.debuger("addEdge",f"Start of edge {e} was forced")
+
+        if force and not cond_e or not cond_s:
+            self.debuger("addEdge",f"Edge {e} was forced")  
+
+        if cond_e and cond_s or force:
+            self.graph[e.start].append(e.end)
             return True
+            
         return False
 
     def addVertice(self, v):
@@ -48,7 +54,7 @@ class Graph:
         Receives either a vertices or an Edge and returns True
         if is present in graph, False otherwise.
         """
-        if value.isinstance(Edge):
+        if isinstance(value, Edge):
             end_exists = value.end in self.graph.keys()
             start_exists = value.start in self.graph.keys()
             if end_exists and start_exists:
@@ -83,7 +89,7 @@ class Graph:
 
     def debuger(self, function :str, message :str):
         if self.debug: 
-            print(10*'-',f" Message in function: {function} ",10*'-',"\n",message)
+            print(10*'-',f" Message in Graph Infrustructure -> {function} ",10*'-',"\n",message,"\n")
 
     def __repr__(self):
         string = "Graph Preview:\n"
@@ -91,5 +97,23 @@ class Graph:
             string += f"\t\t{v} --> "
             for neigh in self.getNeighboors(v):
                 string += f" {neigh},"
-            string = string[:-1]                #cut the last comma
+            string = string[:-1] +"\n"                #cut the last comma
+        string +=20*'-'+"\n"
         return string
+
+
+#some tests for the time being:
+g = Graph(debug=True)
+print(g)
+g.addVertice(1)
+print(g.exists(1))
+g.addEdge(Edge(1,2))
+g.addEdge(Edge(1,2),force=True)
+g.addEdge(Edge(1,3),force=True)
+print(g.exists(Edge(1,2)))
+g.addEdge(Edge(5,6))
+print(g.getNeighboors(5))
+print(g.getNeighboors(1))
+print(g.getNeighboors(1))
+
+print(g)

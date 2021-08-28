@@ -9,4 +9,4 @@ class Edge:
         self.weight = 0
 
     def __repr__(self):
-        pass
+        return f"({self.start})--({self.end})"
