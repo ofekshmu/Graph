@@ -73,11 +73,13 @@ class Graph(Edge):
 
     def __shouldAdd(self, e :Edge):        
         if isinstance(e, Edge):
-            if self.exists(e):
+            if self.exists(e): # fuck loops
                 if self.duplicates:
                     if e.end == e.start and not self.loops:
                         return False
                     return True
+                return False
+            if e.end == e.start and not self.loops:
                 return False
             return True
         else:
@@ -133,7 +135,7 @@ class Graph(Edge):
 
 
 #some tests for the time being:
-g = Graph(debug=False, duplicates=True,loops=True)
+g = Graph(debug=False, duplicates=False,loops=False)
 print(g)
 g.addVertice(1)
 print(g.exists(1))
