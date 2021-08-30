@@ -114,16 +114,20 @@ class Graph(Edge):
             print(10*'-',f" Message in Graph Infrustructure -> {function} ",10*'-',"\n",message,"\n")
 
     def __repr__(self):
-        string = "Graph Preview:\n"
-        for v in self.graph.keys():
-            string += f"\t\t{v} --> "
-            for neigh in self.getNeighboors(v):
-                string += f" {neigh},"
-            string = string[:-1] +"\n"                #cut the last comma
-        loopM = "enabled" if self.loops else "disabled"
-        dirM = "enabled" if self.directed else "disabled"
-        dupM = "enabled" if self.duplicates else "disabled"
-        string += f"Loops are {loopM},\nEdge Direction is {dirM},\nDuplicates are {dupM}.\n"
+        string =20*'-'+"\n"
+        if self.graph == {}:
+            string += "The Graph is EMPTY!\n"
+        else:
+            string += "Graph Preview:\n"
+            for v in self.graph.keys():
+                string += f"\t\t{v} --> "
+                for neigh in self.getNeighboors(v):
+                    string += f" {neigh},"
+                string = string[:-1] +"\n"                #cut the last comma
+            loopM = "enabled" if self.loops else "disabled"
+            dirM = "enabled" if self.directed else "disabled"
+            dupM = "enabled" if self.duplicates else "disabled"
+            string += f"Loops are {loopM},\nEdge Direction is {dirM},\nDuplicates are {dupM}.\n"
         string +=20*'-'+"\n"
         return string
 
@@ -156,5 +160,4 @@ print(g)
 #print(g2)
 
 #implement of non directional double edges
-# implement outstring on empty graph
 # implement check of both sided edges where flipped 
