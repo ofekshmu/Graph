@@ -2,10 +2,16 @@ from Edge import Edge
 
 class Graph:
     
-    def __init__(self, vertices : list = [], edges : list = [], duplicates :bool = False, debug : bool = False):
+    def __init__(self, vertices : list = [],
+                     edges : list = [], 
+                     duplicates :bool = False, 
+                     directed :bool = False,
+                     debug : bool = False):
+                     #loops
         self.graph = {}
         self.debug = debug
         self.duplicates = duplicates
+        self.directed = directed
 
         for v in vertices:
             self.addVertice(v)
@@ -62,7 +68,13 @@ class Graph:
         return False 
 
     def __shouldAdd(self, value):
-        return self.duplicates or (not self.exists(value))
+        if isinstance(value, Edge):
+            return self.duplicates or (not self.exists(value))
+        
+        if isinstance(value, Edge):
+            self.exists()
+
+
 
     def getVertices(self):
         """@returns a list of the vertices in the graph """
