@@ -6,8 +6,9 @@ class Graph:
                      edges : list = [], 
                      duplicates :bool = False, 
                      directed :bool = False,
-                     debug : bool = False):
-                     #loops
+                     debug : bool = False,
+                     loop : bool = False):
+        self.loop = loop
         self.graph = {}
         self.debug = debug
         self.duplicates = duplicates
@@ -72,7 +73,10 @@ class Graph:
             return self.duplicates or (not self.exists(value))
         
         if isinstance(value, Edge):
-            self.exists()
+            exist = self.exists(value)
+            loop = value.end == value.start
+
+            if 
 
 
 
