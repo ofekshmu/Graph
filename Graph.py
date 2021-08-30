@@ -1,3 +1,4 @@
+from typing_extensions import runtime
 from Edge import Edge
 
 class Graph:
@@ -7,8 +8,8 @@ class Graph:
                      duplicates :bool = False, 
                      directed :bool = False,
                      debug : bool = False,
-                     loop : bool = False):
-        self.loop = loop
+                     loops : bool = False):
+        self.loops = loops
         self.graph = {}
         self.debug = debug
         self.duplicates = duplicates
@@ -68,15 +69,17 @@ class Graph:
                 return True
         return False 
 
-    def __shouldAdd(self, value):
-        if isinstance(value, Edge):
-            return self.duplicates or (not self.exists(value))
-        
-        if isinstance(value, Edge):
-            exist = self.exists(value)
-            loop = value.end == value.start
-
-            if 
+    def __shouldAddEdge(self, e :Edge):        
+        if isinstance(e, Edge):
+            if e.end == e.start:
+                return True if self.loops else False
+            elif self.exists(e):
+                return True if self.duplicates else False
+            return True
+        else:
+            self.debuger("__shouldAddEdge","ERORR - something is not right!!")
+            raise RuntimeError
+                
 
 
 
