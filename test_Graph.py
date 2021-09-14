@@ -2,7 +2,7 @@ from GraphModule import Graph
 from Edge import Edge
 
 def testGraph():
-    g = Graph()
+    g = Graph(debug=True)
     g.addVertice(1)
     g.addVertice(2)
     assert g.exists(Edge(1,2)) == False
@@ -19,12 +19,13 @@ def testGraph():
     assert g.exists(3) == True
     assert g.exists(Edge(1,2)) == True
     assert g.exists(Edge(2,1)) == True
-    assert g.addEdge(Edge(1,'afek')) == False
-    assert g.exists(Edge(1,'ofek')) == False
-    g.addEdge(Edge(1,'afek'),force=True)
-    assert g.exists(Edge(1,'afek'))
-    assert g.exists(Edge('afek',1))
+    print(g)
+    assert g.addEdge(Edge(1,"afek")) == False
+    assert g.exists(Edge(1,"ofek")) == False
+    g.addEdge(Edge(1,"afek"),force=True)
+    assert g.exists(Edge(1,"afek"))
+    assert g.exists(Edge("afek",1))
     assert g.exists("afek")
 
-def testDirected():
-    g = Graph(directed=True)
+#def testDirected():
+#    g = Graph(directed=True)

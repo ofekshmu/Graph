@@ -22,7 +22,8 @@ class Graph(Edge):
             self.addEdge(e, force = True)
 
     def _ValidInsertion(self, e: Edge, force):
-        [isExist, isStart, isEnd] = [self.exists(e), self.exists(e.start), self.exists(e.start)]
+        [isExist, isStart, isEnd] = [self.exists(e), self.exists(e.start), self.exists(e.end)]
+        print(e,isExist,isStart,isEnd)
         if isExist:
             if self.duplicates:
                 if e.isLoop() and not self.loops:
@@ -37,21 +38,24 @@ class Graph(Edge):
                 return False
             if isStart and isEnd:
                 return True
-            elif force:
-                if not isStart: 
-                    self.addVertice(e.start)
-                    self.debuger("_ValidInsertion",f"{e.start} was Forced.")
-                if not isEnd : 
-                    self.addVertice(e.end)
-                    self.debuger("_ValidInsertion",f"{e.e} was Forced.")
-                return True
+            else:
+                if force:
+                    if not isStart: 
+                        self.addVertice(e.start)
+                        self.debuger("_ValidInsertion",f"{e.start} was Forced.")
+                    if not isEnd : 
+                        self.addVertice(e.end)
+                        self.debuger("_ValidInsertion",f"{e.end} was Forced.")
+                    return True
+                return False
 
     def addEdge(self, e : Edge, force : bool = False):
         """doc"""
         valid = self._ValidInsertion(e, force)
+        print(valid)
         if valid:
-            self.graph[e.start] = e.end
-            self.graph[e.end] = e.start
+            self.graph[e.start].append(e.end)
+            self.graph[e.end].append(e.start)
             self.edgeList.append(e)
             self.edgeList.append(e.flippedInstance())
         return valid
@@ -71,14 +75,11 @@ class Graph(Edge):
         if is present in graph, False otherwise.
         """
         if isinstance(value, Edge):
-            end_exists = value.end in self.graph.keys()
-            start_exists = value.start in self.graph.keys()
-            if end_exists and start_exists:
+            if value.start in self.graph.keys():
                 if value.end in self.graph[value.start]:
                     return True
-            #if not value._isDir():
-                #value._flip()
-                #check again for normal edges
+            """ Notice, The check here can be done the other way around 
+                since an Edge apears in a graph in both directions"""
         else:
             if value in self.graph.keys():
                 return True
@@ -122,39 +123,7 @@ class Graph(Edge):
                     string += f" {neigh},"
                 string = string[:-1] +"\n"                #cut the last comma
             loopM = "enabled" if self.loops else "disabled"
-            dirM = "enabled" if self.directed else "disabled"
             dupM = "enabled" if self.duplicates else "disabled"
-            string += f"Loops are {loopM},\nEdge Direction is {dirM},\nDuplicates are {dupM}.\n"
+            string += f"Loops are {loopM},\nDuplicates are {dupM}.\n"
         string +=20*'-'+"\n"
         return string
-
-
-#some tests for the time being:
-g = Graph(debug=False, duplicates=False,loops=False)
-print(g)
-g.addVertice(1)
-print(g.exists(1))
-g.addEdge(Edge(1,2),force=True)
-g.addEdge(Edge(1,2))
-
-g.addEdge(Edge(5,5),force=True)
-g.addEdge(Edge(5,5),force=True)
-g.addEdge(Edge(7,7),force=True)
-
-#print(g)
-e = Edge(1,2)
-g.addEdge(e,force=True)
-g.addEdge(Edge(1,3),force=True)
-print(g.exists(Edge(1,2)))
-g.addEdge(Edge(5,6),force=True)
-g.addEdge(Edge(5,6),force=True)
-
-print(g.getNeighboors(5))
-#print(g.getNeighboors(1))
-print(g)
-
-#g2 = Graph(vertices=[1,2,5,7,23],edges=[Edge(1,2),Edge(5,7),Edge(10,1),Edge(20,25)])
-#print(g2)
-
-#implement of non directional double edges
-# implement check of both sided edges where flipped 
