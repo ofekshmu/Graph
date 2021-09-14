@@ -52,7 +52,6 @@ class Graph(Edge):
     def addEdge(self, e : Edge, force : bool = False):
         """doc"""
         valid = self._ValidInsertion(e, force)
-        print(valid)
         if valid:
             self.graph[e.start].append(e.end)
             self.graph[e.end].append(e.start)
@@ -78,8 +77,9 @@ class Graph(Edge):
             if value.start in self.graph.keys():
                 if value.end in self.graph[value.start]:
                     return True
-            """ Notice, The check here can be done the other way around 
-                since an Edge apears in a graph in both directions"""
+            """ Notice, The check here is done from start to end. While in Normal
+                Graph it doesn't matter because the edge appears both ways, it does matter
+                in directional graph. """
         else:
             if value in self.graph.keys():
                 return True

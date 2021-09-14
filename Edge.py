@@ -6,12 +6,13 @@ class Edge:
         self.weight = weight
         self.direction = False
 
+    def Directed(self):
+        self.direction = True
+        return self
+        
     def setWeight(self, w : int):
         self.weight = 0
 
-    def _isDir(self):
-        return self.direction
-    
     def flippedInstance(self):
         return Edge(self.end,self.start)
 

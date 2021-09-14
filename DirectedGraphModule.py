@@ -11,9 +11,10 @@ class DirectedGraph(Graph):
 
         super().__init__(vertices, edges, duplicates, loops, debug)
 
-    def addEdge(self, e : Edge , force : bool = False):
-        #if(super().addEdge(e,force))
-        pass
-
-    def exists():
-        pass
+    def addEdge(self, e : Edge, force : bool = False):
+        """doc"""
+        valid = self._ValidInsertion(e, force)
+        if valid:
+            self.graph[e.start].append(e.end)
+            self.edgeList.append(e.Directed())
+        return valid
