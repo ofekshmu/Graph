@@ -12,12 +12,11 @@ class Edge:
     def _isDir(self):
         return self.direction
     
-    def _flip(self):
-        if self.direction:
-            print("\tWarning!!!\nFlipping an Edge with direction!")
-        temp = self.start
-        self.start = self.end
-        self.end = temp
+    def flippedInstance(self):
+        return Edge(self.end,self.start)
+
+    def isLoop(self):
+        return self.start == self.end
 
     def __repr__(self):
         connector = "-->" if self.direction else "--"

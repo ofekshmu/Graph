@@ -12,6 +12,7 @@ class Graph(Edge):
 
         self.loops = loops
         self.graph = {}
+        self.edgeList = []
         self.debug = debug
         self.duplicates = duplicates
 
@@ -19,33 +20,42 @@ class Graph(Edge):
             self.addVertice(v)
         for e in edges:
             self.addEdge(e, force = True)
-        
-    def addEdge(self, e : Edge, force : bool = False):
-        """ 
-        Adds a new Edge @e to the graph
-        @param e -  a new edge
-        @param force - boolean indicating if to force the new edge onto the graph
-        even if the corresponding vertices do not exist. vetices will be created and edge
-        will be added if @force is True, insertiong will fail otherwise.
-        @returns True upon succesful insertion, False otherwise.
-        """
-        cond_e = e.end in self.graph.keys()
-        cond_s = e.start in self.graph.keys()
-        if self.__shouldAdd(e):
-            if force:
-                if not cond_e:
-                    self.addVertice(e.end)
-                    self.debuger("addEdge",f"End of edge {e} was forced")
-                if not cond_s:
-                    self.addVertice(e.start)
-                    self.debuger("addEdge",f"Start of edge {e} was forced")
 
-            if (cond_e and cond_s) or force:
-                self.graph[e.start].append(e.end)
-                if not self.directed:
-                    self.graph[e.end].append(e.start)
+    def _ValidInsertion(self, e: Edge, force):
+        [isExist, isStart, isEnd] = [self.exists(e), self.exists(e.start), self.exists(e.start)]
+        if isExist:
+            if self.duplicates:
+                if e.isLoop() and not self.loops:
+                    self.debuger("_ValidInsertion",f"{e} was Rejected:\nEdge is a loop in a graph with NO loops.")
+                    return False
                 return True
-        return False
+            self.debuger("_ValidInsertion",f"{e} was Rejected:\nThe graph does not enable duplicates.")
+            return False
+        else:
+            if e.isLoop() and not self.loops:
+                self.debuger("_ValidInsertion",f"{e} was Rejected:\nEdge is a loop in a graph with NO loops.")
+                return False
+            if isStart and isEnd:
+                return True
+            elif force:
+                if not isStart: 
+                    self.addVertice(e.start)
+                    self.debuger("_ValidInsertion",f"{e.start} was Forced.")
+                if not isEnd : 
+                    self.addVertice(e.end)
+                    self.debuger("_ValidInsertion",f"{e.e} was Forced.")
+                return True
+
+    def addEdge(self, e : Edge, force : bool = False):
+        """doc"""
+        valid = self._ValidInsertion(e, force)
+        if valid:
+            self.graph[e.start] = e.end
+            self.graph[e.end] = e.start
+            self.edgeList.append(e)
+            self.edgeList.append(e.flippedInstance())
+        return valid
+
 
     def addVertice(self, v):
         """ Adds a new vertice @v to the graph """
@@ -73,24 +83,6 @@ class Graph(Edge):
             if value in self.graph.keys():
                 return True
         return False 
-
-    def __shouldAdd(self, e :Edge):        
-        if isinstance(e, Edge):
-            if self.exists(e):
-                if self.duplicates:
-                    if e.end == e.start and not self.loops:
-                        return False
-                    return True
-                return False
-            if e.end == e.start and not self.loops:
-                return False
-            return True
-        else:
-            self.debuger("__shouldAddEdge","ERORR - something is not right!!")
-            raise RuntimeError
-                
-
-
 
     def getVertices(self):
         """@returns a list of the vertices in the graph """
