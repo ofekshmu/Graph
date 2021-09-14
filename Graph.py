@@ -2,12 +2,15 @@ from Edge import Edge
 
 class Graph(Edge):
     
-    def __init__(self, vertices : list = [],
-                     edges : list = [], 
-                     duplicates :bool = False, 
-                     directed :bool = False,
-                     debug : bool = False,
-                     loops : bool = False):
+    def __init__(self,
+                    vertices : list = [],
+                    edges : list = [], 
+                    # Graph Settings
+                    duplicates :bool = False, 
+                    directed :bool = False,
+                    loops : bool = False,
+                    debug : bool = False):
+
         self.loops = loops
         self.graph = {}
         self.debug = debug
@@ -73,7 +76,7 @@ class Graph(Edge):
 
     def __shouldAdd(self, e :Edge):        
         if isinstance(e, Edge):
-            if self.exists(e): # fuck loops
+            if self.exists(e):
                 if self.duplicates:
                     if e.end == e.start and not self.loops:
                         return False
