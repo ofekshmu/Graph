@@ -1,4 +1,5 @@
 from GraphModule import Graph
+from DirectedGraphModule import DirectedGraph
 from Edge import Edge
 
 def testGraph():
@@ -26,6 +27,15 @@ def testGraph():
     assert g.exists(Edge(1,"afek"))
     assert g.exists(Edge("afek",1))
     assert g.exists("afek")
+    g.addEdge(Edge(1,1))
+    assert g.exists(Edge(1,1)) == False
 
-#def testDirected():
-#    g = Graph(directed=True)
+def testDirected():
+    g = DirectedGraph()
+    g.addEdge(Edge(1,1))
+    assert g.exists(Edge(1,1)) == False
+    g.addEdge(Edge(1,2))
+    assert g.exists(Edge(1,2)) == True
+    assert g.exists(Edge(2,1)) == False
+    g.addEdge(Edge(2,1))
+    assert g.exists(Edge(2,1)) == True
