@@ -1,7 +1,7 @@
 from Graph import Graph
 
 
-class DirectedGraph(Graph):
+class GraphEx(Graph):
     def __init__():
         Graph.__init__()
 
