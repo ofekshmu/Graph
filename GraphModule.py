@@ -7,7 +7,6 @@ class Graph(Edge):
                     edges : list = [], 
                     # Graph Settings
                     duplicates :bool = False, 
-                    directed :bool = False,
                     loops : bool = False,
                     debug : bool = False):
 
@@ -15,7 +14,6 @@ class Graph(Edge):
         self.graph = {}
         self.debug = debug
         self.duplicates = duplicates
-        self.directed = directed
 
         for v in vertices:
             self.addVertice(v)
