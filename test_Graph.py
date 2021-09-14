@@ -16,3 +16,11 @@ def testGraph():
     assert g.exists(Edge.Edge(3,2)) == True
     assert g.exists(Edge.Edge(2,3)) == True
     assert g.exists(3) == True
+    assert g.exists(Edge.Edge(1,2)) == True
+    assert g.exists(Edge.Edge(2,1)) == True
+    assert g.addEdge(Edge.Edge(1,'afek')) == False
+    assert g.exists(Edge.Edge(1,'ofek')) == False
+    g.addEdge(Edge.Edge(1,'afek'),force=True)
+    assert g.exists(Edge.Edge(1,'afek'))
+    assert g.exists(Edge.Edge('afek',1))
+

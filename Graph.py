@@ -44,6 +44,8 @@ class Graph(Edge):
 
             if (cond_e and cond_s) or force:
                 self.graph[e.start].append(e.end)
+                if not self.directed:
+                    self.graph[e.end].append(e.start)
                 return True
         return False
 
