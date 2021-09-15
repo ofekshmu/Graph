@@ -31,11 +31,32 @@ def testGraph():
     assert g.exists(Edge(1,1)) == False
 
 def testDirected():
-    g = DirectedGraph()
+    g = DirectedGraph(debug=True)
     g.addEdge(Edge(1,1))
     assert g.exists(Edge(1,1)) == False
     g.addEdge(Edge(1,2))
-    assert g.exists(Edge(1,2)) == True
+    assert g.exists(Edge(1,2)) == False
     assert g.exists(Edge(2,1)) == False
     g.addEdge(Edge(2,1))
+    assert g.addEdge(Edge(1,1),force=True) == False
+    assert g.addEdge(Edge(1,2),force=True) == True
+    assert g.exists(Edge(1,2)) == True
+    assert g.exists(Edge(2,1)) == False
+    assert g.addEdge(Edge(2,1)) == True
+    assert g.addEdge(Edge(2,1),force=True) == False
     assert g.exists(Edge(2,1)) == True
+    assert g.getNeighboors(1) == [2]
+    assert g.addVertice(1) == False
+    assert g.addVertice(3) == True
+    assert g.addVertice("four") == True
+    assert g.addEdge(Edge("four","five")) == False
+    assert g.addEdge(Edge("four","five"),force=True) == True
+    assert g.addEdge(Edge("four","five"),force=True) == False
+    assert g.addEdge(Edge(1,3)) == True
+    assert g.addEdge(Edge(1,"four")) == True
+    assert g.getNeighboors(1) == [2,3,"four"]
+    assert g.getNeighboors(2) == [1]
+
+    g2 = DirectedGraph(debug=True)
+
+

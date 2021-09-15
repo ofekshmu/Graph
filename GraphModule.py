@@ -16,6 +16,7 @@ class Graph(Edge):
         self.debug = debug
         self.duplicates = duplicates
 
+        print(type(vertices),vertices)
         for v in vertices:
             self.addVertice(v)
         for e in edges:
@@ -64,8 +65,10 @@ class Graph(Edge):
         """ Adds a new vertice @v to the graph """
         if v in self.graph.keys():
             self.debuger("addVertice",f"{v} is already a vertice in the graph.")
+            return False
         else:
             self.graph[v] = []
+            return True
         
     
     def exists(self, value):
