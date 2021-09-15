@@ -2,7 +2,7 @@ from GraphModule import Graph
 from Edge import Edge
 
 class DirectedGraph(Graph):
-    def __init__(self,
+    def __init__(self, 
                     vertices : list = [],
                     edges : list = [], 
                     # Graph Settings

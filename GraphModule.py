@@ -24,7 +24,7 @@ class Graph(Edge):
 
     def _ValidInsertion(self, e: Edge, force):
         [isExist, isStart, isEnd] = [self.exists(e), self.exists(e.start), self.exists(e.end)]
-        print(e,isExist,isStart,isEnd)
+        #print(e,isExist,isStart,isEnd)
         if isExist:
             if self.duplicates:
                 if e.isLoop() and not self.loops:
@@ -90,11 +90,15 @@ class Graph(Edge):
 
     def getVertices(self):
         """@returns a list of the vertices in the graph """
-        return list(self.graph.values())
+        return list(self.graph.keys())
 
     def getVerticesCount(self):
         """@returns the number of vertices in the graph"""
         return len(self.graph.keys())
+    
+    def getEdges(self):
+        """doc"""
+        return self.edgeList
 
     def getNeighboors(self, v):
         """
