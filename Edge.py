@@ -5,10 +5,13 @@ class Edge:
         self.weight = weight
         self.direction = False
 
-    def Directed(self):
+    def setAsDirected(self):
         self.direction = True
         return self
-        
+    
+    def isDirected(self):
+        return self.direction
+
     def _setWeight(self, w : int):
         self.weight = 0
 

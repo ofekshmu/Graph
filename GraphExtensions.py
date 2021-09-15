@@ -15,5 +15,12 @@ class GraphEx(Graph):
     def _DFS():
         pass
 
-    def genMatrix(self,g: Graph):
-        pass
+    def genMatrix(self, g: Graph):
+        edge_list = g.getEdges()
+        matrix = []
+        for e in edge_list:
+            if e.isDirected():
+                print()
+            else:
+                print()
+        return matrix

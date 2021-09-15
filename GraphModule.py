@@ -59,7 +59,6 @@ class Graph(Edge):
             self.edgeList.append(e)
         return valid
 
-
     def addVertice(self, v):
         """ Adds a new vertice @v to the graph """
         if v in self.graph.keys():
@@ -68,8 +67,7 @@ class Graph(Edge):
         else:
             self.graph[v] = []
             return True
-        
-    
+         
     def exists(self, value):
         """
         Receives either a vertices or an Edge and returns True
@@ -108,7 +106,6 @@ class Graph(Edge):
         else:
             self.debuger("getNeighboors",f"Vertice {v} does not exist.\nNo list returned.")
             raise RuntimeWarning
-
 
     def setDebugMode(self, state : bool = True):
         self.debug = state
