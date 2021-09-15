@@ -1,5 +1,5 @@
-from Graph import Graph
-
+from GraphModule import Graph
+from DirectedGraphModule import DirectedGraph
 
 class GraphEx(Graph):
     def __init__():
