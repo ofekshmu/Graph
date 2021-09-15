@@ -19,11 +19,14 @@ class Edge:
         return self.start == self.end
 
     def __eq__(self,other):
-        cond1 = self.start == other.start 
-        cond2 = self.end == other.end
-        cond3 = self.weight == other.weight
-        cond4 = self.direction == other.direction
-        return cond1 and cond2 and cond3 and cond4
+        cond1 = self.weight == other.weight
+        cond2 = self.direction == other.direction
+        cond3 = self.direction == other.direction
+        values_Cond = self.start == other.start and self.end == other.end
+        if not self.direction:
+            values_Cond = values_Cond or self.start == other.end and self.end == other.start 
+        print(cond1,cond2,cond3,self.direction,values_Cond) 
+        return cond1 and cond2 and cond3 and values_Cond
 
     def __repr__(self):
         connector = "-->" if self.direction else "--"

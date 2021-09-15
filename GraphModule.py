@@ -57,7 +57,6 @@ class Graph(Edge):
             self.graph[e.start].append(e.end)
             self.graph[e.end].append(e.start)
             self.edgeList.append(e)
-            self.edgeList.append(e.flippedInstance())
         return valid
 
 

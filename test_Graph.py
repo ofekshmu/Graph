@@ -32,6 +32,7 @@ def testGraph():
     assert g.exists("afek")
     g.addEdge(Edge(1,1))
     assert g.exists(Edge(1,1)) == False
+    print(g.getEdges())
 
 def testDirected():
     g = DirectedGraph(debug=True)
@@ -83,7 +84,13 @@ def testDirected():
                             Edge(1,"five").Directed(),
                             Edge("five",4).Directed(),
                             Edge("five","five").Directed()]
+    print(g2.getEdges())
 
+def test_edges():
+    assert Edge(1,2) == Edge(1,2)
+    assert type(Edge(2,1).Directed()) == type(Edge(2,1))
+    assert Edge(2,1).Directed() != Edge(2,1)
+    assert Edge(1,2) == Edge(2,1)
 
 
     
