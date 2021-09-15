@@ -14,3 +14,6 @@ class GraphEx(Graph):
 
     def _DFS():
         pass
+
+    def genMatrix(self,g: Graph):
+        pass
