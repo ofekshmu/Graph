@@ -99,6 +99,11 @@ def test_GrapEX():
     ge = GraphEx(g)
     print(ge.genMatrix())
     print(ge.genMatrixStr())
+
+    g2 = Graph(vertices=['a','b','c',3,2,5],edges=[Edge('a',2),Edge(3,2),Edge(3,5),Edge('c','a')])
+    g2 = GraphEx(g2)
+    print(g2.genMatrix())
+    print(g2.genMatrixStr())
     
 
 

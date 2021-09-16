@@ -21,7 +21,8 @@ class GraphEx(DirectedGraph):
         edge_list = self.graph.getEdges()
         vertices = self.graph.getVertices()
         dim = self.graph.getVerticesCount() + 1
-        self.matrix = np.zeros((dim,dim), dtype =np.int32)
+        self.matrix = np.zeros((dim,dim))
+        self.matrix = self.matrix.tolist()
         self.matrix[1:,0] = vertices ; self.matrix[0,1:] = vertices
         res = {vertices[i]: (i+1) for i in range(dim - 1)}
         for e in edge_list:
