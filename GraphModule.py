@@ -115,7 +115,7 @@ class Graph(Edge):
 
     def debuger(self, function :str, message :str):
         if self.debug: 
-            print("\n", 10*'-',f" Message in Graph Infrustructure -> {function} ",10*'-',"\n",message,"\n")
+            print("\n",10*'-',f" Message in Graph Infrustructure -> {function} ",10*'-',"\n",message,"\n")
 
     def __repr__(self):
         string =20*'-'+"\n"

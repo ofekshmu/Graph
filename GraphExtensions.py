@@ -17,28 +17,32 @@ class GraphEx(DirectedGraph):
     def _DFS():
         pass
 
-    def genMatrix(self):
+    def getAdjMat(self):
         edge_list = self.graph.getEdges()
         vertices = self.graph.getVertices()
-        dim = self.graph.getVerticesCount() + 1
-        self.matrix = np.zeros((dim,dim))
-        self.matrix = self.matrix.tolist()
-        self.matrix[1:,0] = vertices ; self.matrix[0,1:] = vertices
-        res = {vertices[i]: (i+1) for i in range(dim - 1)}
+        dim = self.graph.getVerticesCount()
+        self.matrix = np.zeros((dim,dim),dtype=np.int32)
+        self.indexs = {vertices[i]: i for i in range(dim)}
         for e in edge_list:
-            row = res[e.start]
-            col = res[e.end]
+            row = self.indexs[e.start]
+            col = self.indexs[e.end]
             self.matrix[row][col] = 1
             if not e.isDirected():
                 self.matrix[col][row] = 1
         return self.matrix
 
-    def genMatrixStr(self) -> str:
-        str = ""
+    def getAdjMatStr(self) -> str:
+        self.getAdjMat()
+        string = "\nThe Adjacency matrix:\n\t"
+        vertices = self.graph.getVertices()
+        for i in range(len(vertices)):
+            string += str(vertices[i]) +"\t"
+        string += "\n"
         dim = len(self.matrix)
         for i in range(dim):
+            string += str(vertices[i]) +"\t"
             for j in range(dim):
-                str += f"{self.matrix[i][j]}\t"  
-            str += "\n"
-        return str
+                string += f"{self.matrix[i][j]}\t"  
+            string += "\n"
+        return string
 

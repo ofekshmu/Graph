@@ -97,13 +97,14 @@ def test_GrapEX():
     g = DirectedGraph(vertices=[1,2,3],edges=[Edge(1,2),Edge(1,3),Edge(3,2),Edge(3,3)],debug=True)
     print(g)
     ge = GraphEx(g)
-    print(ge.genMatrix())
-    print(ge.genMatrixStr())
+    print(ge.getAdjMat())
+    print(ge.getAdjMatStr())
 
     g2 = Graph(vertices=['a','b','c',3,2,5],edges=[Edge('a',2),Edge(3,2),Edge(3,5),Edge('c','a')])
+    print(g2)
     g2 = GraphEx(g2)
-    print(g2.genMatrix())
-    print(g2.genMatrixStr())
+    print(g2.getAdjMat())
+    print(g2.getAdjMatStr())
     
 
 
