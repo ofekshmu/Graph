@@ -18,9 +18,12 @@ class Graph(Edge):
 
         print(type(vertices),vertices)
         for v in vertices:
-            self.addVertice(v)
+            if not self.addVertice(v):
+                self.debuger("Graph Constructor",f"Graph was not created properly:\ntwo or more identical vertices {v}.")
         for e in edges:
-            self.addEdge(e, force = True)
+            if not self.addEdge(e, force = True):
+                self.debuger("Graph Constructor",f"Graph was not created properly:\n Edge {e} was not added.")
+
 
     def _ValidInsertion(self, e: Edge, force):
         [isExist, isStart, isEnd] = [self.exists(e), self.exists(e.start), self.exists(e.end)]
@@ -112,7 +115,7 @@ class Graph(Edge):
 
     def debuger(self, function :str, message :str):
         if self.debug: 
-            print(10*'-',f" Message in Graph Infrustructure -> {function} ",10*'-',"\n",message,"\n")
+            print("\n", 10*'-',f" Message in Graph Infrustructure -> {function} ",10*'-',"\n",message,"\n")
 
     def __repr__(self):
         string =20*'-'+"\n"

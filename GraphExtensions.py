@@ -21,9 +21,9 @@ class GraphEx(DirectedGraph):
         edge_list = self.graph.getEdges()
         vertices = self.graph.getVertices()
         dim = self.graph.getVerticesCount() + 1
-        self.matrix = np.zeros((dim,dim), dtype =np.int)
+        self.matrix = np.zeros((dim,dim), dtype =np.int32)
         self.matrix[1:,0] = vertices ; self.matrix[0,1:] = vertices
-        res = {vertices[i]: i for i in range(dim - 1)}
+        res = {vertices[i]: (i+1) for i in range(dim - 1)}
         for e in edge_list:
             row = res[e.start]
             col = res[e.end]
@@ -32,7 +32,7 @@ class GraphEx(DirectedGraph):
                 self.matrix[col][row] = 1
         return self.matrix
 
-    def genMatrixStr(self):
+    def genMatrixStr(self) -> str:
         str = ""
         dim = len(self.matrix)
         for i in range(dim):
