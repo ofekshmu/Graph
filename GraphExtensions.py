@@ -1,48 +1,45 @@
 from GraphModule import Graph
-from DirectedGraphModule import DirectedGraph
 import numpy as np
 
-class GraphEx(DirectedGraph):
-    def __init__(self, g: DirectedGraph):
-        self.graph = g
-        self.matrix = []
-
-    def getShortestPath():
-        shortestPath = []
-        return shortestPath
+class AdjMatrix(Graph):
     
-    def _BFS():
-        pass
-
-    def _DFS():
-        pass
-
-    def getAdjMat(self):
-        edge_list = self.graph.getEdges()
-        vertices = self.graph.getVertices()
-        dim = self.graph.getVerticesCount()
-        self.matrix = np.zeros((dim,dim),dtype=np.int32)
-        self.indexs = {vertices[i]: i for i in range(dim)}
+    @staticmethod
+    def get(graph: Graph):
+        """@returns an Adjacency matrix and an dictionary representing vertices indexes """
+        #variables
+        edge_list = graph.getEdges()
+        vertices = graph.getVertices()
+        dim = graph.getVerticesCount()
+        matrix = np.zeros((dim,dim),dtype=np.int32)
+        #dictionary to hold indexes for each vertices in matrix
+        index_dict = {vertices[i]: i for i in range(dim)}
+        #fill matrix
         for e in edge_list:
-            row = self.indexs[e.start]
-            col = self.indexs[e.end]
-            self.matrix[row][col] = 1
-            if not e.isDirected():
-                self.matrix[col][row] = 1
-        return self.matrix
-
-    def getAdjMatStr(self) -> str:
-        self.getAdjMat()
-        string = "\nThe Adjacency matrix:\n\t"
-        vertices = self.graph.getVertices()
+            row = index_dict[e.start]
+            col = index_dict[e.end]
+            matrix[row][col] = 1
+            if not e.isDirected(): # undirected edges will be added both directions
+                matrix[col][row] = 1
+        return (matrix, index_dict)
+    
+    @staticmethod
+    def getString(get_result: tuple) -> str:
+        """ @param get_result is the returned value of the function get of the AdjMatrix class. 
+            @returns a string representing the Adjacency matrix
+        """
+        (matrix, res) = get_result
+        out_str = "\nThe Adjacency matrix:\n\t" #\t in order to skip slot at [0][0]
+        vertices = list(res.keys())
+        # first row indicating vertices
         for i in range(len(vertices)):
-            string += str(vertices[i]) +"\t"
-        string += "\n"
-        dim = len(self.matrix)
+            out_str += str(vertices[i]) +"\t"
+        out_str += "\n"
+        #lines 1 to n-1, where n is the number of vertices
+        dim = len(matrix)
         for i in range(dim):
-            string += str(vertices[i]) +"\t"
+            out_str += str(vertices[i]) +"\t" #first element of each row is a vertice name
             for j in range(dim):
-                string += f"{self.matrix[i][j]}\t"  
-            string += "\n"
-        return string
+                out_str += f"{matrix[i][j]}\t"  
+            out_str += "\n"
+        return out_str
 

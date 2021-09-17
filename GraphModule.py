@@ -16,7 +16,6 @@ class Graph(Edge):
         self.debug = debug
         self.duplicates = duplicates
 
-        print(type(vertices),vertices)
         for v in vertices:
             if not self.addVertice(v):
                 self.debuger("Graph Constructor",f"Graph was not created properly:\ntwo or more identical vertices {v}.")
@@ -130,6 +129,6 @@ class Graph(Edge):
                 string = string[:-1] +"\n"                #cut the last comma
             loopM = "enabled" if self.loops else "disabled"
             dupM = "enabled" if self.duplicates else "disabled"
-            string += f"Loops are {loopM},\nDuplicates are {dupM}.\n"
+            string += f"Graph Settings:\n\tLoops are {loopM},\n\tDuplicates are {dupM}.\n"
         string +=20*'-'+"\n"
         return string
