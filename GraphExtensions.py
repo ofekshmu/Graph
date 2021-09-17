@@ -1,5 +1,6 @@
 from GraphModule import Graph
 import numpy as np
+import math
 
 class AdjMatrix(Graph):
     
@@ -43,3 +44,45 @@ class AdjMatrix(Graph):
             out_str += "\n"
         return out_str
 
+class Path(Graph):
+
+    @staticmethod
+    def Dijkstra(graph: Graph, init, end) -> list:
+        vertices = graph.getVertices()
+        dict = {vertices[i]:v(name=vertices[i],distance=math.inf,visited=False) for i in range(len(vertices))}
+        current = dict[init]
+        current.setDistnace(0)
+        current.visit()
+
+        #for
+        neig = graph.getNeighboors(current)
+        unvisited = [neig[i] if dict[neig[i]].isVisited() else None for i in range(len(neig))]
+        print(unvisited,"\n", "check that ther is no none value")
+        for n in unvisited:
+            n.setDistance(current.getDistance(),acc=True)
+            if n.getDistance()
+
+
+class v:
+    def __init__(self, name, distance: int = math.inf, visited = False):
+        self.name = name
+        self.visited = visited
+        self.distance = distance
+
+    def visit(self):
+        self.visited = True
+    
+    def isVisited(self):
+        return self.visited
+
+    def setDistnace(self, d: int, acc = False):
+        if acc:
+            self.distance += d
+        else:
+            self.distance = d
+    
+    def getDistance(self):
+        return self.distance
+
+    def getName(self):
+        return self.name
