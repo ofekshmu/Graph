@@ -1,6 +1,6 @@
 from GraphModule import Graph
 from DirectedGraphModule import DirectedGraph
-from GraphExtensions import GraphEx
+from GraphExtensions import AdjMatrix
 from Edge import Edge
 
 def testGraph():
@@ -96,15 +96,15 @@ def test_edges():
 def test_GrapEX():
     g = DirectedGraph(vertices=[1,2,3],edges=[Edge(1,2),Edge(1,3),Edge(3,2),Edge(3,3)],debug=True)
     print(g)
-    ge = GraphEx(g)
-    print(ge.getAdjMat())
-    print(ge.getAdjMatStr())
+    mat = AdjMatrix.get(g)
+    str = AdjMatrix.getString(mat)
+    print(mat[0],"\n",str)
 
     g2 = Graph(vertices=['a','b','c',3,2,5],edges=[Edge('a',2),Edge(3,2),Edge(3,5),Edge('c','a')])
     print(g2)
-    g2 = GraphEx(g2)
-    print(g2.getAdjMat())
-    print(g2.getAdjMatStr())
+    mat = AdjMatrix.get(g2)
+    str = AdjMatrix.getString(mat)
+    print(mat[0],"\n",str)
     
 
 
