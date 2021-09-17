@@ -1,5 +1,6 @@
 from GraphModule import Graph
 from DirectedGraphModule import DirectedGraph
+from GraphExtensions import AdjMatrix
 from Edge import Edge
 
 def testGraph():
@@ -78,21 +79,32 @@ def testDirected():
     assert g2.getNeighboors("five") == [4,"five"]
     assert g2.getVertices() == [1,2,3,4,"five"]
     assert g2.getVerticesCount() == 5
-    assert g2.getEdges() == [Edge(1,2).Directed(),
-                            Edge(1,3).Directed(),
-                            Edge(1,4).Directed(),
-                            Edge(1,"five").Directed(),
-                            Edge("five",4).Directed(),
-                            Edge("five","five").Directed()]
+    assert g2.getEdges() == [Edge(1,2).setAsDirected(),
+                            Edge(1,3).setAsDirected(),
+                            Edge(1,4).setAsDirected(),
+                            Edge(1,"five").setAsDirected(),
+                            Edge("five",4).setAsDirected(),
+                            Edge("five","five").setAsDirected()]
     print(g2.getEdges())
 
 def test_edges():
     assert Edge(1,2) == Edge(1,2)
-    assert type(Edge(2,1).Directed()) == type(Edge(2,1))
-    assert Edge(2,1).Directed() != Edge(2,1)
+    assert type(Edge(2,1).setAsDirected()) == type(Edge(2,1))
+    assert Edge(2,1).setAsDirected() != Edge(2,1)
     assert Edge(1,2) == Edge(2,1)
 
+def test_GrapEX():
+    g = DirectedGraph(vertices=[1,2,3],edges=[Edge(1,2),Edge(1,3),Edge(3,2),Edge(3,3)],debug=True)
+    print(g)
+    mat = AdjMatrix.get(g)
+    str = AdjMatrix.getString(mat)
+    print(mat[0],"\n",str)
 
+    g2 = Graph(vertices=['a','b','c',3,2,5],edges=[Edge('a',2),Edge(3,2),Edge(3,5),Edge('c','a')])
+    print(g2)
+    mat = AdjMatrix.get(g2)
+    str = AdjMatrix.getString(mat)
+    print(mat[0],"\n",str)
     
 
 

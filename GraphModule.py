@@ -16,11 +16,13 @@ class Graph(Edge):
         self.debug = debug
         self.duplicates = duplicates
 
-        print(type(vertices),vertices)
         for v in vertices:
-            self.addVertice(v)
+            if not self.addVertice(v):
+                self.debuger("Graph Constructor",f"Graph was not created properly:\ntwo or more identical vertices {v}.")
         for e in edges:
-            self.addEdge(e, force = True)
+            if not self.addEdge(e, force = True):
+                self.debuger("Graph Constructor",f"Graph was not created properly:\n Edge {e} was not added.")
+
 
     def _ValidInsertion(self, e: Edge, force):
         [isExist, isStart, isEnd] = [self.exists(e), self.exists(e.start), self.exists(e.end)]
@@ -59,7 +61,6 @@ class Graph(Edge):
             self.edgeList.append(e)
         return valid
 
-
     def addVertice(self, v):
         """ Adds a new vertice @v to the graph """
         if v in self.graph.keys():
@@ -68,8 +69,7 @@ class Graph(Edge):
         else:
             self.graph[v] = []
             return True
-        
-    
+         
     def exists(self, value):
         """
         Receives either a vertices or an Edge and returns True
@@ -109,13 +109,12 @@ class Graph(Edge):
             self.debuger("getNeighboors",f"Vertice {v} does not exist.\nNo list returned.")
             raise RuntimeWarning
 
-
     def setDebugMode(self, state : bool = True):
         self.debug = state
 
     def debuger(self, function :str, message :str):
         if self.debug: 
-            print(10*'-',f" Message in Graph Infrustructure -> {function} ",10*'-',"\n",message,"\n")
+            print("\n",10*'-',f" Message in Graph Infrustructure -> {function} ",10*'-',"\n",message,"\n")
 
     def __repr__(self):
         string =20*'-'+"\n"
@@ -130,6 +129,6 @@ class Graph(Edge):
                 string = string[:-1] +"\n"                #cut the last comma
             loopM = "enabled" if self.loops else "disabled"
             dupM = "enabled" if self.duplicates else "disabled"
-            string += f"Loops are {loopM},\nDuplicates are {dupM}.\n"
+            string += f"Graph Settings:\n\tLoops are {loopM},\n\tDuplicates are {dupM}.\n"
         string +=20*'-'+"\n"
         return string

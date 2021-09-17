@@ -17,5 +17,5 @@ class DirectedGraph(Graph):
         valid = self._ValidInsertion(e, force)
         if valid:
             self.graph[e.start].append(e.end)
-            self.edgeList.append(e.Directed())
+            self.edgeList.append(e.setAsDirected())
         return valid
