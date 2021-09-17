@@ -1,5 +1,4 @@
-from GraphModule import Graph
-from DirectedGraphModule import DirectedGraph
+from SimpleGraphModule import Graph
 from GraphExtensions import AdjMatrix
 from Edge import Edge
 
@@ -36,7 +35,7 @@ def testGraph():
     print(g.getEdges())
 
 def testDirected():
-    g = DirectedGraph(debug=True)
+    g = Graph(debug=True,directed=True)
     g.addEdge(Edge(1,1))
     assert g.exists(Edge(1,1)) == False
     g.addEdge(Edge(1,2))
@@ -62,7 +61,7 @@ def testDirected():
     assert g.getNeighboors(1) == [2,3,"four"]
     assert g.getNeighboors(2) == [1]
 
-    g2 = DirectedGraph(loops=True,debug=True)
+    g2 = Graph(loops=True, directed=True, debug=True)
     assert g2.addEdge(Edge(1,2),force=True) == True
     print(g2)
     assert g2.getVertices() == [1,2]
@@ -94,7 +93,7 @@ def test_edges():
     assert Edge(1,2) == Edge(2,1)
 
 def test_GrapEX():
-    g = DirectedGraph(vertices=[1,2,3],edges=[Edge(1,2),Edge(1,3),Edge(3,2),Edge(3,3)],debug=True)
+    g = Graph(vertices=[1,2,3],edges=[Edge(1,2),Edge(1,3),Edge(3,2),Edge(3,3)],directed=True, debug=True)
     print(g)
     mat = AdjMatrix.get(g)
     str = AdjMatrix.getString(mat)
