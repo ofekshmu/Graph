@@ -26,15 +26,22 @@ class Graph:
         result = True
         if not isinstance(e,Edge):
             print("ERROR")
+            result = False
         if e.start in self.vertices and e.end in self.vertices:
             self.edges.append(e)
+        return result
 
     def forceEdge(self, e: Edge):
+        result = True
+        if not isinstance(e,Edge):
+            print("ERROR")
+            result = False
         if not e.start in self.vertices:
             self.vertices.append(V(id=e.start))
         if not e.end in self.vertices:
             self.vertices.append(V(id=e.end))
-        self.edges.append(e)
+        if result: self.edges.append(e)
+        return result
 
     def popEdge(self, e: Edge):
         NotImplemented()
