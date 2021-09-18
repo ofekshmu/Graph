@@ -1,4 +1,4 @@
-from GraphModule import Graph
+from SimpleGraphModule import Graph
 import numpy as np
 
 class AdjMatrix(Graph):
