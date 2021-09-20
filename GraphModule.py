@@ -1,5 +1,5 @@
 from typing import Optional, Union
-from Edge import Edge
+from CompEdge import Edge
 from Vertice import V
 import math
 
@@ -7,8 +7,11 @@ class Graph:
 
     def __init__(self,
                         vertices: V = [],
-                        edges: Edge = []):
+                        edges: Edge = [],
+                        directed = True):
         # NEED TO CHECK FOR DUPLICATES
+        self.directed = directed
+
         self.vertices = []
         for v in vertices:
             if isinstance(v,V):
@@ -19,21 +22,27 @@ class Graph:
         self.edges = []
         for e in edges:
             if isinstance(e, Edge):
-                self.edges.appenf(e)
+                self.addEdge(e)
             else:
                 print(f"{e} is not of type 'Edge'!")
+
+        self.directed = directed
     
     def addEdge(self, e: Edge):
         result = True
         if not isinstance(e,Edge):
             print("ERROR")
             result = False
-        if e.start in self.vertices and e.end in self.vertices:
+        if self.directed: e.setAsDirected()
+        if self.vExists(e.getStart()) in self.vertices and self.vExists(e.getEnd()) in self.vertices:
             self.edges.append(e)
+            if self.directed:
+                self.edges.append(e.flippedInstance())
         return result
 
     def forceEdge(self, e: Edge):
         result = True
+        if self.directed: e.setAsDirected()
         if not isinstance(e,Edge):
             print("ERROR")
             result = False
@@ -82,4 +91,28 @@ class Graph:
             return object in self.edges
         else:
             print(f"object is not of Type Edge or Vertice")
+
+    def vExists(self, id):
+        for v in self.vertices:
+            if id == v.getId():
+                return True
+        return False
+
+    def __repr__(self):
+        dict = {}
+        for v in self.vertices:
+            dict[v.id] = []
+        for e in self.edges:
+            dict[e.getStart()].append(e.getEnd())
+
+        str = ""
+        for k,v in dict.items():
+            str += f"{k} -->"
+            for vertice in v:
+                str += f" {vertice},"
+            str = str[:-1] +"\n"
+        return str
+    
+    def getRaw(self):
+        return [self.edges,self.vertices]
 

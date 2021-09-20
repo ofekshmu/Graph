@@ -1,3 +1,5 @@
+import math
+
 class V:
     def __init__(self, id, distance: int = math.inf, visited = False):
         self.id = id
@@ -20,5 +22,11 @@ class V:
     def getDistance(self):
         return self.distance
 
-    def getName(self):
-        return self.name
+    def getId(self):
+        return self.id
+
+    def __eq__(self, other): #TODO: might invoke a problem. checks only per id.
+        return self.id == other.id
+
+    def __repr__(self):
+        return f"'{self.id}'"

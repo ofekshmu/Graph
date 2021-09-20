@@ -1,7 +1,9 @@
+from Vertice import V
+
 class Edge:
-    def __init__(self, s, e,weight: int = 0):
-        self.start = s
-        self.end = e
+    def __init__(self, start, end, weight: int = 0):
+        self.start = start
+        self.end = end
         self.weight = weight
         self.direction = False
 
