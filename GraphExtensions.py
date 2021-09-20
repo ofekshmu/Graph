@@ -1,4 +1,5 @@
-from SimpleGraphModule import Graph
+from GraphModule import Graph
+from CompEdge import Edge
 import numpy as np
 import math
 
@@ -47,17 +48,18 @@ class AdjMatrix(Graph):
 class Path(Graph):
 
     @staticmethod
-    def Dijkstra(graph: Graph, init, end) -> list:
-        vertices = graph.getVertices()
-        dict = {vertices[i]:v(name=vertices[i],distance=math.inf,visited=False) for i in range(len(vertices))}
-        current = dict[init]
-        current.setDistnace(0)
-        current.visit()
+    def dijkstra(g: Graph, init, end) -> list:
+        g.dijkstra_Init()
+        dijkstraRec(g, init, end)
+        return g.getDistance(end)
+        
+    def dijkstraRec(g: Graph, init, end):
+        unvisited = g.getUnvisited(init)
+        for v in unvisited:
+            acc_distance = g.getDistance(init) + g.getWeight(Edge(init,v))
+            if acc_distance < g.getDistance(v):
+                g.setDistance(acc_distance)
+            dijkstraRec(g, v, end)
 
-        #for
-        neig = graph.getNeighboors(current)
-        unvisited = [neig[i] if dict[neig[i]].isVisited() else None for i in range(len(neig))]
-        print(unvisited,"\n", "check that ther is no none value")
-        for n in unvisited:
-            n.setDistance(current.getDistance(),acc=True)
-            if n.getDistance()
+            
+

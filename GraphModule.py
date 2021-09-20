@@ -130,4 +130,13 @@ class Graph:
 
     def getRaw(self):
         return [self.edges,self.vertices]
+    
+    def visit(self, v: V):
+        #Mark v as visited
+        NotImplemented()
+
+    def dijkstra_Init():
+        NotImplemented()
+        # unvisit all
+        # set distance to zero for init and infinity for all others
 
