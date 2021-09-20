@@ -1,3 +1,4 @@
+from typing import Optional, Union
 from Edge import Edge
 from Vertice import V
 import math
@@ -7,7 +8,7 @@ class Graph:
     def __init__(self,
                         vertices: V = [],
                         edges: Edge = []):
-        
+        # NEED TO CHECK FOR DUPLICATES
         self.vertices = []
         for v in vertices:
             if isinstance(v,V):
@@ -51,7 +52,8 @@ class Graph:
             result = False
         return result
     
-    def popVertice(self, v: V):
+    def popVertice(self, v: V): #problematic( what about connecting edges??)
+        print(f"method implicates errors, do not use!")
         result = True
         if v in self.vertices:
             self.edges.remove(v)
@@ -72,4 +74,12 @@ class Graph:
             if e.start == v:
                 lst.append(e.end)
         return lst
+
+    def exists(self, object: Union[Edge,V]):
+        if isinstance(object,V):
+            return object in self.vertices
+        elif isinstance(object, Edge):
+            return object in self.edges
+        else:
+            print(f"object is not of Type Edge or Vertice")
 
