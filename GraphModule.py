@@ -8,36 +8,41 @@ class Graph:
     def __init__(self,
                         vertices: V = [],
                         edges: Edge = [],
-                        directed = True):
+                        directed = True,
+                        debug = False):
         # NEED TO CHECK FOR DUPLICATES
+        self.debug = debug
         self.directed = directed
 
         self.vertices = []
-        for v in vertices:
-            if isinstance(v,V):
-                self.vertices.append(v)
+        for vId in vertices:
+            if isinstance(vId,V):
+                self.vertices.append(vId)
             else:
-                self.vertices.append(V(id=v))
+                self.vertices.append(V(id=vId))
         
         self.edges = []
         for e in edges:
             if isinstance(e, Edge):
-                self.addEdge(e)
+                if not self.addEdge(e):
+                    self.debuger("Graph Constructor",f"{e} Was not added!")
             else:
-                print(f"{e} is not of type 'Edge'!")
+                self.debuger("Graph Constructor", f"{e} is not of type 'Edge'!")
 
         self.directed = directed
     
     def addEdge(self, e: Edge):
-        result = True
+        result = False
+        #sanity check
         if not isinstance(e,Edge):
-            print("ERROR")
-            result = False
-        if self.directed: e.setAsDirected()
-        if self.vExists(e.getStart()) in self.vertices and self.vExists(e.getEnd()) in self.vertices:
-            self.edges.append(e)
-            if self.directed:
-                self.edges.append(e.flippedInstance())
+            self.debuger("addEdge",f"{e} is not of type 'Edge'!")
+        else:
+            if self.directed: e.setAsDirected()
+            if self.vExists(e.getStartId()) and self.vExists(e.getEndId()) :
+                self.edges.append(e)
+                if not self.directed:
+                    self.edges.append(e.flippedInstance())
+                result = True
         return result
 
     def forceEdge(self, e: Edge):
@@ -80,11 +85,17 @@ class Graph:
     def NeighboorsOf(self, v: V): # TODO method impl is not efficient!
         lst = []
         for e in self.edges:
-            if e.start == v:
-                lst.append(e.end)
+            if e.getStartId() == v:
+                lst.append(self.getV(e.getEndId()))
         return lst
 
-    def exists(self, object: Union[Edge,V]):
+    def getV(self, vId) -> V:
+        for v in self.vertices:
+            if vId == v.getId():
+                return v
+        self.debuger("getV",f"{v} was not found in graph!")
+
+    def exists(self, object: Union[Edge,V]) -> bool:
         if isinstance(object,V):
             return object in self.vertices
         elif isinstance(object, Edge):
@@ -92,7 +103,7 @@ class Graph:
         else:
             print(f"object is not of Type Edge or Vertice")
 
-    def vExists(self, id):
+    def vExists(self, id) -> bool:
         for v in self.vertices:
             if id == v.getId():
                 return True
@@ -103,7 +114,7 @@ class Graph:
         for v in self.vertices:
             dict[v.id] = []
         for e in self.edges:
-            dict[e.getStart()].append(e.getEnd())
+            dict[e.getStartId()].append(e.getEndId())
 
         str = ""
         for k,v in dict.items():
@@ -113,6 +124,10 @@ class Graph:
             str = str[:-1] +"\n"
         return str
     
+    def debuger(self, function :str, message :str):
+        if self.debug: 
+            print("\n",10*'~',f" Message in Graph Infrustructure -> {function} ",10*'~',"\n",message,"\n")
+
     def getRaw(self):
         return [self.edges,self.vertices]
 

@@ -1,11 +1,11 @@
 from Vertice import V
 
 class Edge:
-    def __init__(self, start, end, weight: int = 0):
-        self.start = start
-        self.end = end
+    def __init__(self, startId, endId, weight: int = 1, direction: bool = True):
+        self.startId = startId
+        self.endId = endId
         self.weight = weight
-        self.direction = False
+        self.direction = direction
 
     def setAsDirected(self):
         self.direction = True
@@ -18,26 +18,25 @@ class Edge:
         self.weight = 0
 
     def flippedInstance(self):
-        return Edge(self.end,self.start)
+        return Edge(startId=self.endId, endId=self.startId)
 
     def isLoop(self):
-        return self.start == self.end
+        return self.startId == self.endId
 
     def __eq__(self,other):
         cond1 = self.weight == other.weight
         cond2 = self.direction == other.direction
-        cond3 = self.direction == other.direction
-        values_Cond = self.start == other.start and self.end == other.end
+        values_Cond = self.startId == other.startId and self.endId == other.endId
         if not self.direction:
-            values_Cond = values_Cond or self.start == other.end and self.end == other.start 
-        print(cond1,cond2,cond3,self.direction,values_Cond) 
-        return cond1 and cond2 and cond3 and values_Cond
+            values_Cond = values_Cond or self.startId == other.endId and self.endId == other.startId 
+        return cond1 and cond2 and values_Cond
 
-    def getStart(self):
-        return self.start
+    def getStartId(self) -> str:
+        return self.startId
 
-    def getEnd(self):
-        return self.end
-    def __repr__(self):
+    def getEndId(self) -> str:
+        return self.endId
+
+    def __repr__(self) -> str:
         connector = "-->" if self.direction else "--"
-        return f"({self.start}){connector}({self.end})"
+        return f"({self.startId}){connector}({self.endId})"

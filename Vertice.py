@@ -1,7 +1,9 @@
 import math
 
 class V:
-    def __init__(self, id, distance: int = math.inf, visited = False):
+    def __init__(self, id, 
+                    distance: int = math.inf, 
+                    visited = False):
         self.id = id
         self.visited = visited
         self.distance = distance
@@ -9,6 +11,7 @@ class V:
 
     def visit(self):
         self.visited = True
+        return self
     
     def isVisited(self):
         return self.visited
