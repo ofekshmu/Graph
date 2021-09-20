@@ -44,14 +44,32 @@ class Graph:
         return result
 
     def popEdge(self, e: Edge):
-        NotImplemented()
+        result = True
+        if e in self.edges:
+            self.edges.remove(e)
+        else:
+            result = False
+        return result
     
     def popVertice(self, v: V):
-        NotImplemented()
+        result = True
+        if v in self.vertices:
+            self.edges.remove(v)
+        else:
+            result = False
+        return result
     
-    def getUnvisited():
-        NotImplemented()
+    def getUnvisited(self):
+        lst = []
+        for v in self.vertices:
+            if not v.isVisited():
+                lst.append(v)
+        return lst
 
-    def NeighboorsOf(v: V):
-        NotImplemented()
+    def NeighboorsOf(self, v: V): # TODO method impl is not efficient!
+        lst = []
+        for e in self.edges:
+            if e.start == v:
+                lst.append(e.end)
+        return lst
 
