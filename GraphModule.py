@@ -75,14 +75,21 @@ class Graph(V, Edge):
             result = False
         return result
     
-    def getUnvisited(self):
+    def getUnvisited(self, v_input):
         lst = []
         for v in self.vertices:
-            if not v.isVisited():
+            if not v.isVisited() and self.isNeighboors(v.getId(),v_input):
                 lst.append(v)
         return lst
 
-    def NeighboorsOf(self, v: V): # TODO method impl is not efficient!
+    def isNeighboors(self, v_start, v_end):
+        lst = self.NeighboorsOf(v_start)
+        for v in lst:
+            if v.getId() == v_end:
+                return True
+        return False 
+
+    def NeighboorsOf(self, v): # TODO method impl is not efficient!
         lst = []
         for e in self.edges:
             if e.getStartId() == v:
@@ -145,9 +152,9 @@ class Graph(V, Edge):
     def setDistanceV(self, v: V, d):
         return self.getV(v).setDistance(d)
 
-    def __dijkstra_Init(self, init):
+    def dijkstra_Init(self, init):
         for v in self.vertices:
             v.unvisit()
             v.setDistance(math.inf,acc=False)
-        self.getV(init).setDistnace(0, acc=False)
+        self.getV(init).setDistance(0, acc=False)
 

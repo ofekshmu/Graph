@@ -48,6 +48,9 @@ class AdjMatrix(Graph):
 class Path(Graph):
 
         
+    def __init__(self):
+        pass
+
     def _dijkstraRec(self, g: Graph, init, end):
         unvisited = g.getUnvisited(init)
         for v in unvisited:
@@ -56,9 +59,8 @@ class Path(Graph):
                 g.setDistanceV(v, acc_distance)
             self._dijkstraRec(g, v, end)
 
-    @staticmethod
     def dijkstra(self, g: Graph, init, end) -> list:
-        g.__dijkstra_Init()
+        g.dijkstra_Init(init)
         self._dijkstraRec(g, init, end)
         return g.getDistanceV(end)
 

@@ -12,11 +12,15 @@ class V:
     def visit(self):
         self.visited = True
         return self
+
+    def unvisit(self):
+        self.visited = False
+        return self
     
     def isVisited(self):
         return self.visited
 
-    def setDistnace(self, d: int, acc = False):
+    def setDistance(self, d: int, acc = False):
         if acc:
             self.distance += d
         else:

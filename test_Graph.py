@@ -15,8 +15,6 @@ def testGraphModule():
     assert g.exists(Edge(1,3)) == False
     assert g.exists(Edge(1,4))
     assert g.exists(Edge(4,2))
-    print(g.getRaw())
-    print(g)
     assert g.exists(Edge(2,4)) == False
     assert g.popEdge(Edge(1,4))
     assert g.exists(Edge(1,4)) == False
@@ -28,7 +26,8 @@ def testGraphModule():
     assert g.exists(e)
     assert g.popEdge(e)
     assert g.exists(e) == False
-    assert g.getUnvisited() == [V(1),V(4),V(2),V(6),V(8)]
+    print(g)
+    assert g.getUnvisited(2) == [V(6)]
     assert g.NeighboorsOf(1) == []
     assert g.NeighboorsOf(2) == [V(6)]
 
@@ -39,4 +38,5 @@ def testShortestPath():
                         Edge(2,6),Edge(5,6),Edge(6,7),Edge(4,7)],
                         directed=False,
                         debug=True)
-    assert Path.dijkstra(g,1,7) == 2
+    p = Path()
+    assert p.dijkstra(g,1,7) == 2
