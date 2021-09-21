@@ -1,6 +1,7 @@
 from GraphModule import Graph
 from CompEdge import Edge
 from Vertice import V
+from GraphExtensions import Path
 
 def testGraphModule():
     g = Graph(vertices=[1,4,2,6,8],edges=[Edge(1,3),
@@ -31,5 +32,11 @@ def testGraphModule():
     assert g.NeighboorsOf(1) == []
     assert g.NeighboorsOf(2) == [V(6)]
 
-#def testShortestPath():
-#    NotImplemented()
+def testShortestPath():
+    g = Graph(vertices=[1,2,3,4,5,6,7],
+                edges=[Edge(1,4),Edge(1,3),Edge(1,2),
+                        Edge(2,3),Edge(2,5),Edge(3,5),
+                        Edge(2,6),Edge(5,6),Edge(6,7),Edge(4,7)],
+                        directed=False,
+                        debug=True)
+    assert Path.dijkstra(g,1,7) == 2

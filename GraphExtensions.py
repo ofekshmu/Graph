@@ -48,18 +48,18 @@ class AdjMatrix(Graph):
 class Path(Graph):
 
         
-    def dijkstraRec(self, g: Graph, init, end):
+    def _dijkstraRec(self, g: Graph, init, end):
         unvisited = g.getUnvisited(init)
         for v in unvisited:
             acc_distance = g.getDistanceV(init) + g.getWeight(Edge(init,v))
             if acc_distance < g.getDistanceV(v):
                 g.setDistanceV(v, acc_distance)
-            self.dijkstraRec(g, v, end)
+            self._dijkstraRec(g, v, end)
 
     @staticmethod
     def dijkstra(self, g: Graph, init, end) -> list:
         g.__dijkstra_Init()
-        self.dijkstraRec(g, init, end)
+        self._dijkstraRec(g, init, end)
         return g.getDistanceV(end)
 
             
