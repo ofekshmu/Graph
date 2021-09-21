@@ -6,6 +6,10 @@ class V:
                     visited = False):
         self.id = id
         self.visited = visited
+
+        #------
+
+        #------
         self.distance = distance
         self.neighboors = []
 
