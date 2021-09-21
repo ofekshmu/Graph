@@ -52,8 +52,6 @@ class Path(Graph):
         pass
 
     def _dijkstraRec(self, g: Graph, init, end):
-        if init == end:
-            return g.getDistanceV(init)
         #---- for debugging --------
         print(f"init: {init}, distance: {g.getDistanceV(init)}, neighboors: {g.NeighboorsOf(init)}")
         print(g)
@@ -63,8 +61,13 @@ class Path(Graph):
             acc_distance = g.getDistanceV(init) + g.getWeight(Edge(init,v.getId()))
             if acc_distance < g.getDistanceV(v.getId()):
                 g.setDistanceV(v.getId(), acc_distance)
+        #---- for debugging --------
+        for v in unvisited:
+            print(f"current distance for {v} is {v.getDistance()}")
         g.visit(init)
-        self._dijkstraRec(g, v.getId(), end)        
+        for v in unvisited:
+            if v.getId() != end:
+                self._dijkstraRec(g, v.getId(), end)        
 
 
     def dijkstra(self, g: Graph, init, end) -> list:

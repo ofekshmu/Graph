@@ -141,7 +141,14 @@ class Graph(V, Edge):
     def getWeight(self, e: Edge):
         for e_g in self.edges:
             if e == e_g:
-                return e.getWeight()
+                return e_g.getWeight()
+    
+    def setWeight(self, e: Edge, w):
+        for e_g in self.edges:
+            if e == e_g:
+                e_g.setWeight(w)
+                return True
+        return False
 
     def visit(self, v):
         self.getV(v).visit()

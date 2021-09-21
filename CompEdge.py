@@ -14,8 +14,8 @@ class Edge:
     def isDirected(self):
         return self.direction
 
-    def _setWeight(self, w : int):
-        self.weight = 0
+    def setWeight(self, w : int):
+        self.weight = w
 
     def getWeight(self):
         return self.weight
@@ -27,12 +27,11 @@ class Edge:
         return self.startId == self.endId
 
     def __eq__(self,other):
-        cond1 = self.weight == other.weight
         cond2 = self.direction == other.direction
         values_Cond = self.startId == other.startId and self.endId == other.endId
         if not self.direction:
             values_Cond = values_Cond or self.startId == other.endId and self.endId == other.startId 
-        return cond1 and cond2 and values_Cond
+        return cond2 and values_Cond
 
     def getStartId(self) -> str:
         return self.startId
