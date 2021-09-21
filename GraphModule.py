@@ -3,7 +3,7 @@ from CompEdge import Edge
 from Vertice import V
 import math
 
-class Graph:
+class Graph(V, Edge):
 
     def __init__(self,
                         vertices: V = [],
@@ -131,12 +131,23 @@ class Graph:
     def getRaw(self):
         return [self.edges,self.vertices]
     
-    def visit(self, v: V):
-        #Mark v as visited
-        NotImplemented()
+    def getWeight(self, e: Edge):
+        for e_g in self.edges:
+            if e == e_g:
+                return e.getWeight()
 
-    def dijkstra_Init():
-        NotImplemented()
-        # unvisit all
-        # set distance to zero for init and infinity for all others
+    def visit(self, v: V):
+        v.visit()
+    
+    def getDistanceV(self, v: V):
+        return self.getV(v).getDistance()
+
+    def setDistanceV(self, v: V, d):
+        return self.getV(v).setDistance(d)
+
+    def __dijkstra_Init(self, init):
+        for v in self.vertices:
+            v.unvisit()
+            v.setDistance(math.inf,acc=False)
+        self.getV(init).setDistnace(0, acc=False)
 

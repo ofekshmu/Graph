@@ -17,6 +17,9 @@ class Edge:
     def _setWeight(self, w : int):
         self.weight = 0
 
+    def getWeight(self):
+        return self.weight
+
     def flippedInstance(self):
         return Edge(startId=self.endId, endId=self.startId)
 
