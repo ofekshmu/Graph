@@ -40,3 +40,5 @@ def testShortestPath():
                         debug=True)
     p = Path()
     assert p.dijkstra(g,1,7) == 2
+
+testGraphModule()

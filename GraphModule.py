@@ -78,7 +78,7 @@ class Graph(V, Edge):
     def getUnvisited(self, v_input):
         lst = []
         for v in self.vertices:
-            if not v.isVisited() and self.isNeighboors(v.getId(),v_input):
+            if not v.isVisited() and self.isNeighboors(v_input, v.getId()):
                 lst.append(v)
         return lst
 
@@ -125,9 +125,9 @@ class Graph(V, Edge):
 
         str = ""
         for k,v in dict.items():
-            str += f"{k} -->"
+            str += f"{k} --> "
             for vertice in v:
-                str += f" {vertice},"
+                str += f"{vertice},"
             str = str[:-1] +"\n"
         return str
     
