@@ -52,12 +52,13 @@ class Path(Graph):
         pass
 
     def _dijkstraRec(self, g: Graph, init, end):
+        g.visit(init)
         unvisited = g.getUnvisited(init)
         for v in unvisited:
-            acc_distance = g.getDistanceV(init) + g.getWeight(Edge(init,v))
-            if acc_distance < g.getDistanceV(v):
-                g.setDistanceV(v, acc_distance)
-            self._dijkstraRec(g, v, end)
+            acc_distance = g.getDistanceV(init) + g.getWeight(Edge(init,v.getId()))
+            if acc_distance < g.getDistanceV(v.getId()):
+                g.setDistanceV(v.getId(), acc_distance)
+            self._dijkstraRec(g, v.getId(), end)
 
     def dijkstra(self, g: Graph, init, end) -> list:
         g.dijkstra_Init(init)

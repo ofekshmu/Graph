@@ -143,13 +143,13 @@ class Graph(V, Edge):
             if e == e_g:
                 return e.getWeight()
 
-    def visit(self, v: V):
-        v.visit()
+    def visit(self, v):
+        self.getV(v).visit()
     
-    def getDistanceV(self, v: V):
+    def getDistanceV(self, v):
         return self.getV(v).getDistance()
 
-    def setDistanceV(self, v: V, d):
+    def setDistanceV(self, v, d):
         return self.getV(v).setDistance(d)
 
     def dijkstra_Init(self, init):
