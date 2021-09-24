@@ -45,10 +45,11 @@ class AdjMatrix(Graph):
             out_str += "\n"
         return out_str
 
-def dijkstraRec(g: Graph, init, end):
+def dijkstraRec(g: Graph, init, end, debug):
     #---- for debugging --------
-    print(f"init: {init}, distance: {g.getDistanceV(init)}, neighboors: {g.NeighboorsOf(init)}")
-    print(g)
+    if debug:
+        print(f"init: {init}, distance: {g.getDistanceV(init)}, neighboors: {g.NeighboorsOf(init)}")
+        print(g)
     # --------------------------
     unvisited = g.getUnvisited(init)
     for v in unvisited:
@@ -56,19 +57,20 @@ def dijkstraRec(g: Graph, init, end):
         if acc_distance < g.getDistanceV(v.getId()):
             g.setDistanceV(v.getId(), acc_distance)
     #---- for debugging --------
-    for v in unvisited:
-        print(f"current distance for {v} is {v.getDistance()}")
+    if debug:    
+        for v in unvisited:
+            print(f"current distance for {v} is {v.getDistance()}")
     #---------------------------
     g.visit(init)
     for v in unvisited:
         if v.getId() != end:
-            dijkstraRec(g, v.getId(), end)   
+            dijkstraRec(g, v.getId(), end, debug)   
 class Path(Graph):      
 
     @staticmethod
-    def dijkstra(g: Graph, init, end):
+    def dijkstra(g: Graph, init, end, debug = False):
         g.dijkstra_Init(init)
-        dijkstraRec(g, init, end)
+        dijkstraRec(g, init, end, debug)
         return g.getDistanceV(end)
 
             

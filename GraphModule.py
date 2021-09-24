@@ -15,14 +15,16 @@ class Graph(V, Edge):
         self.directed = directed
 
         self.vertices = {}
+        self.edges = {}
         for vId in vertices:
             if isinstance(vId,V):
                 self.vertices[vId.getId()] = vId
+                self.edges[vId.getId()] = []
             else:
                 self.vertices[vId] = V(id=vId)
+                self.edges[vId] = []
         
         #TODO: add a force option for edges
-        self.edges = []
         for e in edges:
             if isinstance(e, Edge):
                 if not self.addEdge(e):
@@ -39,9 +41,10 @@ class Graph(V, Edge):
         else:
             if self.directed: e.setAsDirected()
             if self.vExists(e.getStartId()) and self.vExists(e.getEndId()) :
-                self.edges.append(e)
+                #self.edges.append(e)
+                self.edges[e.getStartId()].append(e)
                 if not self.directed:
-                    self.edges.append(e.flippedInstance())
+                    self.edges[e.getEndId()].append(e.flippedInstance())
                 result = True
         return result
 
@@ -56,17 +59,26 @@ class Graph(V, Edge):
             self.vertices[e.getStartId()].append(V(id=e.getStartId()))
         if not e.getEndId() in self.vertices:
             self.vertices[e.getEndId()].append(V(id=e.getEndId()))
-        if result: self.edges.append(e)
+        if result:
+            self.edges[e.getStartId()].append(e)
+            if not self.directed:
+                self.edges[e.getEndId()].append(e.flippedInstance())
         return result
 
-    def popEdge(self, e: Edge):
-        result = True
-        if e in self.edges:
-            self.edges.remove(e)
-        else:
-            result = False
-        return result
-    
+    def popEdge(self, e_in: Edge):
+        res = self.getEdge(e_in)
+        self.edges[e_in.getStartId()].remove(e_in) #TODO might be possible that value being deleted is deleting "res" too, might need deep copy
+        return res
+
+    def getEdge(self, e_in: Edge):
+        """"""
+        lst =  self.edges[e_in.getStartId()]
+        for e in lst:
+            if e.getStartId() == e_in.getStartId():
+                return e
+        self.debuger("getEdge","Edge {e} was not found")
+        return False
+
     def popVertice(self, vId) -> V: #TODO:problematic( what about connecting edges??)
         print(f"method implicates errors, do not use!")
 
@@ -86,15 +98,14 @@ class Graph(V, Edge):
     def isNeighboors(self, v_start, v_end):
         lst = self.NeighboorsOf(v_start)
         for v in lst:
-            if v.getId() == v_end:
+            if v == v_end:
                 return True
         return False 
 
-    def NeighboorsOf(self, v): # TODO method impl is not efficient!
+    def NeighboorsOf(self, vId): # TODO can have duplicates in dup graph
         lst = []
-        for e in self.edges:
-            if e.getStartId() == v:
-                lst.append(self.getVertice(e.getEndId()))
+        for e in self.edges[vId]:
+            lst.append(e.getEndId())
         return lst
 
     def getNeighboors(self, vId, unvisited = False):
@@ -108,30 +119,22 @@ class Graph(V, Edge):
             return None
             
 
-    def exists(self, object: Edge) -> bool:
-        if isinstance(object, Edge):
-            return object in self.edges
-        elif object in self.vertices:
-            return True
-        else:
-            print(f"object is not of Type Edge or Vertice")
+    def Eexists(self, object: Edge) -> bool:
+        if self.getEdge(object) == False:
             return False
+        return True
 
     def vExists(self, vId) -> bool:
         return vId in self.vertices
 
     def __repr__(self):
         dict = {}
-        for vId in self.vertices.keys():
-            dict[vId] = []
-        for e in self.edges:
-            dict[e.getStartId()].append(e.getEndId())
 
         str = ""
-        for k,v in dict.items():
-            str += f"{k} --> "
-            for vertice in v:
-                str += f"{vertice},"
+        for vId in self.vertices.keys():
+            str += f"{vId} --> "
+            for e in self.edges[vId]:
+                str += f"{e.getEndId()},"
             str = str[:-1] +"\n"
         return str
     
@@ -143,16 +146,13 @@ class Graph(V, Edge):
         return [self.edges,self.vertices.values()]
     
     def getWeight(self, e: Edge):
-        for e_g in self.edges:
-            if e == e_g:
-                return e_g.getWeight()
+        edge = self.getEdge(e)
+        return edge.getWeight()
     
     def setWeight(self, e: Edge, w):
-        for e_g in self.edges:
-            if e == e_g:
-                e_g.setWeight(w)
-                return True
-        return False
+        edge = self.getEdge(e)
+        edge.setWeight(w)
+        return True
 
     def visit(self, vId):
         self.getVertice(vId).visit()

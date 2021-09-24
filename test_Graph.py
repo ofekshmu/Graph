@@ -1,3 +1,4 @@
+from math import e
 from GraphModule import Graph
 from CompEdge import Edge
 from Vertice import V
@@ -39,6 +40,7 @@ def testShortestPath():
                         directed=False,
                         debug=True)
 
+    print(g)
     assert Path.dijkstra(g,1,7) == 2
     assert g.setWeight(Edge(4,7),10)
     assert Path.dijkstra(g,1,7) == 3
@@ -46,7 +48,10 @@ def testShortestPath():
     assert Path.dijkstra(g,1,7) == 3
     assert g.popEdge(Edge(2,6))
     assert Path.dijkstra(g,1,7) == 4
+    print(g)
     assert g.setWeight(Edge(1,2),5)
+    print(g)
+    print(g.getWeight(Edge(1,2)))
     assert Path.dijkstra(g,1,7) == 4
     assert g.popEdge(Edge(1,3))
     assert Path.dijkstra(g,1,7) == 8
