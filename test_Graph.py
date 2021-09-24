@@ -38,23 +38,19 @@ def testShortestPath():
                         Edge(2,6),Edge(5,6),Edge(6,7),Edge(4,7)],
                         directed=False,
                         debug=True)
-    p = Path()
-    assert p.dijkstra(g,1,7) == 2
+
+    assert Path.dijkstra(g,1,7) == 2
     assert g.setWeight(Edge(4,7),10)
-    assert p.dijkstra(g,1,7) == 3
+    assert Path.dijkstra(g,1,7) == 3
     assert g.popEdge(Edge(4,7))
-    assert p.dijkstra(g,1,7) == 3
+    assert Path.dijkstra(g,1,7) == 3
     assert g.popEdge(Edge(2,6))
-    assert p.dijkstra(g,1,7) == 4
+    assert Path.dijkstra(g,1,7) == 4
     assert g.setWeight(Edge(1,2),5)
-    assert p.dijkstra(g,1,7) == 4
+    assert Path.dijkstra(g,1,7) == 4
     assert g.popEdge(Edge(1,3))
-    assert p.dijkstra(g,1,7) == 8
+    assert Path.dijkstra(g,1,7) == 8
     assert g.addEdge(Edge(4,7,weight=2))
-    assert p.dijkstra(g,1,7) == 3
+    assert Path.dijkstra(g,1,7) == 3
     
-
- 
-
-
 testShortestPath()

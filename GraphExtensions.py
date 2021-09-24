@@ -45,34 +45,30 @@ class AdjMatrix(Graph):
             out_str += "\n"
         return out_str
 
-class Path(Graph):
+def dijkstraRec(g: Graph, init, end):
+    #---- for debugging --------
+    print(f"init: {init}, distance: {g.getDistanceV(init)}, neighboors: {g.NeighboorsOf(init)}")
+    print(g)
+    # --------------------------
+    unvisited = g.getUnvisited(init)
+    for v in unvisited:
+        acc_distance = g.getDistanceV(init) + g.getWeight(Edge(init,v.getId()))
+        if acc_distance < g.getDistanceV(v.getId()):
+            g.setDistanceV(v.getId(), acc_distance)
+    #---- for debugging --------
+    for v in unvisited:
+        print(f"current distance for {v} is {v.getDistance()}")
+    #---------------------------
+    g.visit(init)
+    for v in unvisited:
+        if v.getId() != end:
+            dijkstraRec(g, v.getId(), end)   
+class Path(Graph):      
 
-        
-    def __init__(self):
-        pass
-
-    def _dijkstraRec(self, g: Graph, init, end):
-        #---- for debugging --------
-        print(f"init: {init}, distance: {g.getDistanceV(init)}, neighboors: {g.NeighboorsOf(init)}")
-        print(g)
-        # --------------------------
-        unvisited = g.getUnvisited(init)
-        for v in unvisited:
-            acc_distance = g.getDistanceV(init) + g.getWeight(Edge(init,v.getId()))
-            if acc_distance < g.getDistanceV(v.getId()):
-                g.setDistanceV(v.getId(), acc_distance)
-        #---- for debugging --------
-        for v in unvisited:
-            print(f"current distance for {v} is {v.getDistance()}")
-        g.visit(init)
-        for v in unvisited:
-            if v.getId() != end:
-                self._dijkstraRec(g, v.getId(), end)        
-
-
-    def dijkstra(self, g: Graph, init, end) -> list:
+    @staticmethod
+    def dijkstra(g: Graph, init, end):
         g.dijkstra_Init(init)
-        self._dijkstraRec(g, init, end)
+        dijkstraRec(g, init, end)
         return g.getDistanceV(end)
 
             
