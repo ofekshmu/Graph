@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import List, Optional, Union
 from CompEdge import Edge
 from Vertice import V
 import math
@@ -14,13 +14,14 @@ class Graph(V, Edge):
         self.debug = debug
         self.directed = directed
 
-        self.vertices = []
+        self.vertices = {}
         for vId in vertices:
             if isinstance(vId,V):
-                self.vertices.append(vId)
+                self.vertices[vId.getId()] = vId
             else:
-                self.vertices.append(V(id=vId))
+                self.vertices[vId] = V(id=vId)
         
+        #TODO: add a force option for edges
         self.edges = []
         for e in edges:
             if isinstance(e, Edge):
@@ -29,7 +30,6 @@ class Graph(V, Edge):
             else:
                 self.debuger("Graph Constructor", f"{e} is not of type 'Edge'!")
 
-        self.directed = directed
     
     def addEdge(self, e: Edge):
         result = False
@@ -49,12 +49,13 @@ class Graph(V, Edge):
         result = True
         if self.directed: e.setAsDirected()
         if not isinstance(e,Edge):
-            print("ERROR")
+            print(f"tried forcing {e} which is not an edge!")
             result = False
-        if not e.start in self.vertices:
-            self.vertices.append(V(id=e.start))
-        if not e.end in self.vertices:
-            self.vertices.append(V(id=e.end))
+    
+        if not e.getStartId() in self.vertices:
+            self.vertices[e.getStartId()].append(V(id=e.getStartId()))
+        if not e.getEndId() in self.vertices:
+            self.vertices[e.getEndId()].append(V(id=e.getEndId()))
         if result: self.edges.append(e)
         return result
 
@@ -66,19 +67,19 @@ class Graph(V, Edge):
             result = False
         return result
     
-    def popVertice(self, v: V): #problematic( what about connecting edges??)
+    def popVertice(self, vId) -> V: #TODO:problematic( what about connecting edges??)
         print(f"method implicates errors, do not use!")
-        result = True
-        if v in self.vertices:
-            self.edges.remove(v)
-        else:
-            result = False
+
+        result = self.vertices.pop(vId, None)
+        if result == None:
+            print(f"{vId} was not found\nNone returned!")
+
         return result
     
-    def getUnvisited(self, v_input):
+    def getUnvisited(self, vId) -> List: # TODO: implement with edge dictionary to save using isNei...
         lst = []
-        for v in self.vertices:
-            if not v.isVisited() and self.isNeighboors(v_input, v.getId()):
+        for v in self.vertices.values():
+            if not v.isVisited() and self.isNeighboors(vId, v.getId()):
                 lst.append(v)
         return lst
 
@@ -93,33 +94,36 @@ class Graph(V, Edge):
         lst = []
         for e in self.edges:
             if e.getStartId() == v:
-                lst.append(self.getV(e.getEndId()))
+                lst.append(self.getVertice(e.getEndId()))
         return lst
 
-    def getV(self, vId) -> V:
-        for v in self.vertices:
-            if vId == v.getId():
-                return v
-        self.debuger("getV",f"{v} was not found in graph!")
+    def getNeighboors(self, vId, unvisited = False):
+        NotImplemented()
 
-    def exists(self, object: Union[Edge,V]) -> bool:
-        if isinstance(object,V):
-            return object in self.vertices
-        elif isinstance(object, Edge):
+    def getVertice(self, vId) -> V:
+        if vId in self.vertices:
+            return self.vertices[vId]
+        else:
+            self.debuger("getVertice",f"{vId} is not a vertice in the current graph")
+            return None
+            
+
+    def exists(self, object: Edge) -> bool:
+        if isinstance(object, Edge):
             return object in self.edges
+        elif object in self.vertices:
+            return True
         else:
             print(f"object is not of Type Edge or Vertice")
+            return False
 
-    def vExists(self, id) -> bool:
-        for v in self.vertices:
-            if id == v.getId():
-                return True
-        return False
+    def vExists(self, vId) -> bool:
+        return vId in self.vertices
 
     def __repr__(self):
         dict = {}
-        for v in self.vertices:
-            dict[v.id] = []
+        for vId in self.vertices.keys():
+            dict[vId] = []
         for e in self.edges:
             dict[e.getStartId()].append(e.getEndId())
 
@@ -136,7 +140,7 @@ class Graph(V, Edge):
             print("\n",10*'~',f" Message in Graph Infrustructure -> {function} ",10*'~',"\n",message,"\n")
 
     def getRaw(self):
-        return [self.edges,self.vertices]
+        return [self.edges,self.vertices.values()]
     
     def getWeight(self, e: Edge):
         for e_g in self.edges:
@@ -150,18 +154,18 @@ class Graph(V, Edge):
                 return True
         return False
 
-    def visit(self, v):
-        self.getV(v).visit()
+    def visit(self, vId):
+        self.getVertice(vId).visit()
     
-    def getDistanceV(self, v):
-        return self.getV(v).getDistance()
+    def getDistanceV(self, vId):
+        return self.getVertice(vId).getDistance()
 
-    def setDistanceV(self, v, d):
-        return self.getV(v).setDistance(d)
+    def setDistanceV(self, vId, distance):
+        return self.getVertice(vId).setDistance(distance)
 
     def dijkstra_Init(self, init):
-        for v in self.vertices:
+        for v in self.vertices.values():
             v.unvisit()
-            v.setDistance(math.inf,acc=False)
-        self.getV(init).setDistance(0, acc=False)
+            v.setDistance(math.inf)
+        self.getVertice(init).setDistance(0, acc=False)
 
