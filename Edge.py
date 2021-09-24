@@ -1,5 +1,5 @@
 class Edge:
-    def __init__(self, s, e,weight: int = 0):
+    def __init__(self, s, e,weight: int = 1):
         self.start = s
         self.end = e
         self.weight = weight
@@ -31,6 +31,11 @@ class Edge:
         print(cond1,cond2,cond3,self.direction,values_Cond) 
         return cond1 and cond2 and cond3 and values_Cond
 
+    def getStart(self):
+        return self.start
+
+    def getEnd(self):
+        return self.end
     def __repr__(self):
         connector = "-->" if self.direction else "--"
         return f"({self.start}){connector}({self.end})"
