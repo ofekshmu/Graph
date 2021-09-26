@@ -27,6 +27,7 @@ class Graph(Edge):
 
 
     def _ValidInsertion(self, e: Edge, force):
+        """"""
         [isExist, isStart, isEnd] = [self.exists(e), self.exists(e.start), self.exists(e.end)]
         #print(e,isExist,isStart,isEnd)
         if isExist:
