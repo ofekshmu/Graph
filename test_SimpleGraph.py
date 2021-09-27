@@ -76,11 +76,11 @@ def testDirected():
     assert g2.exists(("five","five")) == True
     assert g2.getNeighboors("five") == [4,"five"]
     assert g2.getVertices() == [1,2,3,4,"five"]
-    assert g2.getVerticesCount() == 5
     assert g2.getEdges() == [(1,2),(1,3),(1,4),(1,"five"),("five",4),("five","five")]
     print(g2.getEdges())
 
-def DONOTRUN_GrapEX():
+
+def test_GrapEX():
     g = Graph(vertices=[1,2,3],edges=[(1,2),(1,3),(3,2),(3,3)],directed=True, debug=True)
     print(g)
     mat = AdjMatrix.get(g)

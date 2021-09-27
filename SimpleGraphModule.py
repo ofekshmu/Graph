@@ -1,5 +1,6 @@
+from SimpleGraphInterface import InformalSimpleGraphInterface
 
-class Graph():
+class Graph(InformalSimpleGraphInterface):
     
     def __init__(self,
                     vertices: list = [],
@@ -24,21 +25,21 @@ class Graph():
             if not self.addEdge(e, force = True):
                 self.debuger("Graph Constructor",f"Graph was not created properly:\n Edge {e} was not added.")
 
-    def _ValidInsertion(self, e: tuple, force):
+    def __ValidInsertion(self, e: tuple, force):
         """"""
         [isExist, isStart, isEnd] = [self.exists(e), self.exists(e[0]), self.exists(e[1])]
         #print(e,isExist,isStart,isEnd)
         if isExist:
             if self.duplicates:
                 if e[0] == e[1] and not self.loops:
-                    self.debuger("_ValidInsertion",f"{e} was Rejected:\nEdge is a loop in a graph with NO loops.")
+                    self.debuger("__ValidInsertion",f"{e} was Rejected:\nEdge is a loop in a graph with NO loops.")
                     return False
                 return True
-            self.debuger("_ValidInsertion",f"{e} was Rejected:\nThe graph does not enable duplicates.")
+            self.debuger("__ValidInsertion",f"{e} was Rejected:\nThe graph does not enable duplicates.")
             return False
         else:
             if e[0] == e[1] and not self.loops:
-                self.debuger("_ValidInsertion",f"{e} was Rejected:\nEdge is a loop in a graph with NO loops.")
+                self.debuger("__ValidInsertion",f"{e} was Rejected:\nEdge is a loop in a graph with NO loops.")
                 return False
             if isStart and isEnd:
                 return True
@@ -46,16 +47,16 @@ class Graph():
                 if force:
                     if not isStart: 
                         self.addVertice(e[0])
-                        self.debuger("_ValidInsertion",f"{e[0]} was Forced.")
+                        self.debuger("__ValidInsertion",f"{e[0]} was Forced.")
                     if not isEnd : 
                         self.addVertice(e[1])
-                        self.debuger("_ValidInsertion",f"{e[1]} was Forced.")
+                        self.debuger("__ValidInsertion",f"{e[1]} was Forced.")
                     return True
                 return False
 
     def addEdge(self, e: tuple, force : bool = False):
         """doc"""
-        valid = self._ValidInsertion(e, force)
+        valid = self.__ValidInsertion(e, force)
         if valid:
             self.graph[e[0]].append(e[1])
             self.edgeList.append(e)           
@@ -93,10 +94,6 @@ class Graph():
     def getVertices(self):
         """@returns a list of the vertices in the graph """
         return list(self.graph.keys())
-
-    def getVerticesCount(self):
-        """@returns the number of vertices in the graph"""
-        return len(self.graph.keys())
     
     def getEdges(self):
         """doc"""
