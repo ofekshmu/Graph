@@ -1,6 +1,17 @@
 from SimpleGraphModule import Graph
 from GraphExtensions import AdjMatrix
 
+"""
+Run tests in module:
+    $ pytest *module_Name*.py
+Run tests in a directory:
+    $ pytest *directory*/
+To run a spesific test:
+    $ pytest *test_mod*.py::*test_func*
+Run tests by keyword expressions:
+    $ pytest -k "*Key words*"
+"""
+
 def testGraph():
     g = Graph(debug=True)
     g.addVertice(1)
@@ -16,7 +27,7 @@ def testGraph():
     assert g.getVertices() == [1,2,"ofek"]
     assert g.exists("ofek") == True
     assert g.exists(1) and g.exists(2) and g.exists("ofek") and not g.exists(3)
-    g.addEdge((3,2),force=True)
+    g.forceEdge((3,2))
     assert g.exists((3,2)) == True
     assert g.exists((2,3)) == True
     assert g.exists(3) == True
@@ -25,7 +36,7 @@ def testGraph():
     print(g)
     assert g.addEdge((1,"afek")) == False
     assert g.exists((1,"ofek")) == False
-    g.addEdge((1,"afek"),force=True)
+    g.forceEdge((1,"afek"))
     assert g.exists((1,"afek"))
     assert g.exists(("afek",1))
     assert g.exists("afek")
@@ -41,36 +52,36 @@ def testDirected():
     assert g.exists((1,2)) == False
     assert g.exists((2,1)) == False
     g.addEdge((2,1))
-    assert g.addEdge((1,1),force=True) == False
-    assert g.addEdge((1,2),force=True) == True
+    assert g.forceEdge((1,1)) == False
+    assert g.forceEdge((1,2))
     assert g.exists((1,2)) == True
     assert g.exists((2,1)) == False
     assert g.addEdge((2,1)) == True
-    assert g.addEdge((2,1),force=True) == False
+    assert g.forceEdge((2,1)) == False
     assert g.exists((2,1)) == True
     assert g.getNeighboors(1) == [2]
     assert g.addVertice(1) == False
     assert g.addVertice(3) == True
     assert g.addVertice("four") == True
     assert g.addEdge(("four","five")) == False
-    assert g.addEdge(("four","five"),force=True) == True
-    assert g.addEdge(("four","five"),force=True) == False
+    assert g.forceEdge(("four","five")) == True
+    assert g.forceEdge(("four","five")) == False
     assert g.addEdge((1,3)) == True
     assert g.addEdge((1,"four")) == True
     assert g.getNeighboors(1) == [2,3,"four"]
     assert g.getNeighboors(2) == [1]
 
     g2 = Graph(loops=True, directed=True, debug=True)
-    assert g2.addEdge((1,2),force=True) == True
+    assert g2.forceEdge((1,2)) == True
     print(g2)
     assert g2.getVertices() == [1,2]
-    assert g2.addEdge((1,3),force=True) == True
+    assert g2.forceEdge((1,3)) == True
     assert g2.getVertices() == [1,2,3]
-    assert g2.addEdge((1,4),force=True) == True
-    assert g2.addEdge((1,"five"),force=True) == True
+    assert g2.forceEdge((1,4)) == True
+    assert g2.forceEdge((1,"five")) == True
     assert g2.getNeighboors(1) == [2,3,4,"five"]
     assert g2.getNeighboors(2) == []
-    assert g2.addEdge(("five",4),force=True) == True
+    assert g2.forceEdge(("five",4)) == True
     assert g2.getNeighboors("five") == [4]
     assert g2.addEdge(("five","five")) == True
     assert g2.exists(("five","five")) == True

@@ -9,7 +9,7 @@ class InformalSimpleGraphInterface:
                     debug: bool = False):        
         """doc"""
         pass
-
+    
     def __ValidInsertion(self, e, force) -> bool:
         """doc"""
         pass
@@ -26,6 +26,15 @@ class InformalSimpleGraphInterface:
         """doc"""
         pass
     
+    def debuger(self, function :str, message :str):
+        """doc"""
+        pass
+    
+    def __repr__(self):
+        """doc"""
+        pass
+     
+    # --------- GETTERS ---------
     def getVertices(self) -> list:
         """doc"""
         pass
@@ -37,16 +46,8 @@ class InformalSimpleGraphInterface:
     def getNeighboors(self, v):
         """doc"""
         pass
-    
+    # --------- SETTERS ---------
     def setDebugMode(self, state : bool = True):
         """doc"""
-        pass
-    
-    def debuger(self, function :str, message :str):
-        """doc"""
-        pass
-    
-    def __repr__(self):
-        """doc"""
-        pass
-    
+        pass 
+     
