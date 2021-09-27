@@ -1,6 +1,5 @@
-from Edge import Edge
 
-class Graph(Edge):
+class Graph():
     
     def __init__(self,
                     vertices: list = [],
@@ -25,21 +24,20 @@ class Graph(Edge):
             if not self.addEdge(e, force = True):
                 self.debuger("Graph Constructor",f"Graph was not created properly:\n Edge {e} was not added.")
 
-
-    def _ValidInsertion(self, e: Edge, force):
+    def _ValidInsertion(self, e: tuple, force):
         """"""
-        [isExist, isStart, isEnd] = [self.exists(e), self.exists(e.start), self.exists(e.end)]
+        [isExist, isStart, isEnd] = [self.exists(e), self.exists(e[0]), self.exists(e[1])]
         #print(e,isExist,isStart,isEnd)
         if isExist:
             if self.duplicates:
-                if e.isLoop() and not self.loops:
+                if e[0] == e[1] and not self.loops:
                     self.debuger("_ValidInsertion",f"{e} was Rejected:\nEdge is a loop in a graph with NO loops.")
                     return False
                 return True
             self.debuger("_ValidInsertion",f"{e} was Rejected:\nThe graph does not enable duplicates.")
             return False
         else:
-            if e.isLoop() and not self.loops:
+            if e[0] == e[1] and not self.loops:
                 self.debuger("_ValidInsertion",f"{e} was Rejected:\nEdge is a loop in a graph with NO loops.")
                 return False
             if isStart and isEnd:
@@ -47,24 +45,23 @@ class Graph(Edge):
             else:
                 if force:
                     if not isStart: 
-                        self.addVertice(e.start)
-                        self.debuger("_ValidInsertion",f"{e.start} was Forced.")
+                        self.addVertice(e[0])
+                        self.debuger("_ValidInsertion",f"{e[0]} was Forced.")
                     if not isEnd : 
-                        self.addVertice(e.end)
-                        self.debuger("_ValidInsertion",f"{e.end} was Forced.")
+                        self.addVertice(e[1])
+                        self.debuger("_ValidInsertion",f"{e[1]} was Forced.")
                     return True
                 return False
 
-    def addEdge(self, e : Edge, force : bool = False):
+    def addEdge(self, e: tuple, force : bool = False):
         """doc"""
         valid = self._ValidInsertion(e, force)
         if valid:
-            self.graph[e.start].append(e.end)
-            if self.directed:
-                self.edgeList.append(e.setAsDirected())
-            else:
-                self.graph[e.end].append(e.start)
-                self.edgeList.append(e)
+            self.graph[e[0]].append(e[1])
+            self.edgeList.append(e)           
+            if not self.directed:
+                self.graph[e[1]].append(e[0])
+                self.edgeList.append((e[1],e[0]))
         return valid
 
     def addVertice(self, v):
@@ -81,9 +78,9 @@ class Graph(Edge):
         Receives either a vertices or an Edge and returns True
         if is present in graph, False otherwise.
         """
-        if isinstance(value, Edge):
-            if value.start in self.graph.keys():
-                if value.end in self.graph[value.start]:
+        if isinstance(value, tuple):
+            if value[0] in self.graph.keys():
+                if value[1] in self.graph[value[0]]:
                     return True
             """ Notice, The check here is done from start to end. While in Normal
                 Graph it doesn't matter because the edge appears both ways, it does matter

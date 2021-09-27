@@ -2,7 +2,6 @@ class Edge:
     def __init__(self, s, e,weight: int = 0):
         self.start = s
         self.end = e
-        self.weight = weight
         self.direction = False
 
     def setAsDirected(self):
