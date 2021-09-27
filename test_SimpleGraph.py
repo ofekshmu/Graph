@@ -103,6 +103,15 @@ def test_GrapEX():
     mat = AdjMatrix.get(g2)
     str = AdjMatrix.getString(mat)
     print(mat[0],"\n",str)
+
+def test_raiseError():
+    g = Graph(vertices=[1,2,3])
+    try:   
+        assert g.getNeighboors(4) == []
+        print("\nError was not raised")
+    except RuntimeWarning:
+        print("\nError seccssecfuly catched")
+
     
 
 

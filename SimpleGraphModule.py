@@ -1,3 +1,5 @@
+from typing import List
+from numpy import void
 from SimpleGraphInterface import InformalSimpleGraphInterface
 
 class Graph(InformalSimpleGraphInterface):
@@ -21,26 +23,29 @@ class Graph(InformalSimpleGraphInterface):
 
         for v in vertices:
             if not self.addVertice(v):
-                self.debuger("Graph Constructor",f"Graph was not created properly:\ntwo or more identical vertices '{v}'.")
+                self.__debuger("Graph Constructor",f"Graph was not created properly:\ntwo or more identical vertices '{v}'.")
         for e in edges:
             if not self.forceEdge(e):
-                self.debuger("Graph Constructor",f"Graph was not created properly:\n Edge {self.__e_str(e)} was not added.")
+                self.__debuger("Graph Constructor",f"Graph was not created properly:\nEdge {self.__e_str(e)} was not added.")
 
-    def __ValidInsertion(self, e: tuple, force):
-        """"""
+    def __ValidInsertion(self, e: tuple, force) -> bool:
+        """ Private Function
+            Given a tuple @e representing an edge. validates if the presence of the edge in
+            the graph is valid and @returns True and False otherwise.
+            Upon receiving a @force = True, might add new edges to graph to enable edge insertion.
+        """
         [isExist, isStart, isEnd] = [self.exists(e), self.exists(e[0]), self.exists(e[1])]
-        #print(e,isExist,isStart,isEnd)
         if isExist:
             if self.__duplicates:
                 if e[0] == e[1] and not self.__loops:
-                    self.debuger("__ValidInsertion",f"{self.__e_str(e)} was Rejected:\nEdge is a loop in a graph with NO loops.")
+                    self.__debuger("__ValidInsertion",f"{self.__e_str(e)} was Rejected:\nEdge is a loop in a graph with NO loops.")
                     return False
                 return True
-            self.debuger("__ValidInsertion",f"{self.__e_str(e)} was Rejected:\nThe graph does not enable duplicates.")
+            self.__debuger("__ValidInsertion",f"{self.__e_str(e)} was Rejected:\nThe graph does not enable duplicates.")
             return False
         else:
             if e[0] == e[1] and not self.__loops:
-                self.debuger("__ValidInsertion",f"{self.__e_str(e)} was Rejected:\nEdge is a loop in a graph with NO loops.")
+                self.__debuger("__ValidInsertion",f"{self.__e_str(e)} was Rejected:\nEdge is a loop in a graph with NO loops.")
                 return False
             if isStart and isEnd:
                 return True
@@ -48,15 +53,17 @@ class Graph(InformalSimpleGraphInterface):
                 if force:
                     if not isStart: 
                         self.addVertice(e[0])
-                        self.debuger("__ValidInsertion",f"'{e[0]}' was Forced.")
+                        self.__debuger("__ValidInsertion",f"'{e[0]}' was Forced.")
                     if not isEnd : 
                         self.addVertice(e[1])
-                        self.debuger("__ValidInsertion",f"'{e[1]}' was Forced.")
+                        self.__debuger("__ValidInsertion",f"'{e[1]}' was Forced.")
                     return True
                 return False
 
     def addEdge(self, e: tuple) -> bool:
-        """doc"""
+        """ adds an edge to the graph.
+            on successful insertion returns True, False otherwise 
+        """
         valid = self.__ValidInsertion(e, force= False)
         if valid:
             self.__graph[e[0]].append(e[1])
@@ -67,7 +74,11 @@ class Graph(InformalSimpleGraphInterface):
         return valid
 
     def forceEdge(self, e: tuple) -> bool:
-        """doc"""
+        """ forces an edge onto the graph.
+            on successful force, returns True, False otherwise.
+            forcing an edge defines as adding its vertices when they are missing in the graph.
+            vertices will be added only if graph rules are met upon insertion.
+        """
         valid = self.__ValidInsertion(e, force = True)
         if valid:
             self.__graph[e[0]].append(e[1])
@@ -78,18 +89,21 @@ class Graph(InformalSimpleGraphInterface):
         return valid
 
     def addVertice(self, v):
-        """ Adds a new vertice @v to the graph """
+        """ Adds a new vertice @v to the graph 
+            Returns True upon successful insertion, False otherwise.
+        """
         if v in self.__graph.keys():
-            self.debuger("addVertice",f"'{v}'' is already a vertice in the graph.")
+            self.__debuger("addVertice",f"'{v}'' is already a vertice in the graph.")
             return False
         else:
             self.__graph[v] = []
             return True
          
-    def exists(self, value):
+    def exists(self, value) -> bool:
         """
         Receives either a vertices or an Edge and returns True
         if is present in graph, False otherwise.
+        Edge is represented by a tuple while vertice could be represented by any type.
         """
         if isinstance(value, tuple):
             if value[0] in self.__graph.keys():
@@ -103,37 +117,45 @@ class Graph(InformalSimpleGraphInterface):
                 return True
         return False 
 
-    def getVertices(self):
-        """@returns a list of the vertices in the graph """
+    def getVertices(self) -> list:
+        """Returns a list of the vertices in the graph """
         return list(self.__graph.keys())
     
-    def getEdges(self):
-        """doc"""
+    def getEdges(self) -> list:
+        """Returns a list of egdes in the graph"""
         return self.__edgeList
 
-    def getNeighboors(self, v):
+    def getNeighboors(self, v) -> list:
+        """ Returns the the neighboors of @v.
+            throws a RunTimeError if @v does not exist in graph
         """
-        @returns the the neighboors of @v.
-        throws an error if @vb does not exist in graph"""
         if self.exists(v):
             return self.__graph[v]
         else:
-            self.debuger("getNeighboors",f"Vertice '{v}'' does not exist.\nNo list returned.")
+            self.__debuger("getNeighboors",f"Vertice '{v}'' does not exist.\nNo list returned.")
             raise RuntimeWarning
 
-    def setDebugMode(self, state : bool = True):
+    def setDebugMode(self, state: bool = True):
+        """ Change the graphs debug mode """
         self.__debug = state
 
-    def debuger(self, function :str, message :str):
+    def __debuger(self, function: str, message: str):
+        """ Private function
+            for printing Messages in infrustructure
+        """
         if self.__debug: 
             print("\n",10*'-',f" Message in Graph Infrustructure -> {function} ",10*'-',"\n",message,"\n")
 
     def __e_str(self, e):
+        """ Pricvate function
+            for printing edges
+        """
         con = "--" if self.__directed else "->"
         return f"{e[0]}{con}{e[1]}"
             
 
     def __repr__(self):
+        """ Returns a string describing the Graph"""
         string =20*'-'+"\n"
         if self.__graph == {}:
             string += "The Graph is EMPTY!\n"
