@@ -135,6 +135,12 @@ class Graph(InformalSimpleGraphInterface):
             self.__debuger("getNeighboors",f"Vertice '{v}'' does not exist.\nNo list returned.")
             raise RuntimeWarning
 
+    def isNeighboors(self, v1, v2) -> bool:
+        """ Returns True if edge v1-->v2 exists, False otherwise"""
+        # valid for both direct and undirected graph
+        return (v1,v2) in self.__edgeList
+
+
     def setDebugMode(self, state: bool = True):
         """ Change the graphs debug mode """
         self.__debug = state
@@ -171,3 +177,9 @@ class Graph(InformalSimpleGraphInterface):
             string += f"Graph Settings:\n\tLoops are {loopM},\n\tDuplicates are {dupM}.\n"
         string +=20*'-'+"\n"
         return string
+
+
+# need to test function "isNeighboors"
+# make harder tests and check prints
+# remove edge
+# remove vertice

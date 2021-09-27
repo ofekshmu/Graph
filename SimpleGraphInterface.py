@@ -25,7 +25,7 @@ class InformalSimpleGraphInterface:
         """
         pass
 
-    def __e_str(self, e) -> void:
+    def __e_str(self, e):
         """ Pricvate function
             for printing edges
         """ 
@@ -62,7 +62,10 @@ class InformalSimpleGraphInterface:
         Edge is represented by a tuple while vertice could be represented by any type.
         """
         pass
-     
+    
+    def isNeighboors(self, v1, v2) -> bool:
+        """ Returns True if edge v1-->v2 exists, False otherwise"""
+        pass 
     # --------- GETTERS ---------
     def getVertices(self) -> list:
         """Returns a list of the vertices in the graph """
