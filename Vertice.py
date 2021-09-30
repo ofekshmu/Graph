@@ -1,40 +1,46 @@
 import math
+import enum
+from typing import Union
+class Color(enum):
+    black = "black",
+    gray = "gray",
+    white = "white"
 
 class V:
-    def __init__(self, id, 
-                    distance: int = math.inf, 
-                    visited = False):
-        self.id = id
-        self.visited = visited
+    def __init__(self, id):       
+        self.__id = id
+        self.__color = Color.White
+        self.__distance = math.inf
 
-        #------
-
-        #------
-        self.distance = distance
-        self.neighboors = []
-
-    def visit(self):
-        self.visited = True
-        return self
-
-    def unvisit(self):
-        self.visited = False
-        return self
+    # GETTERS
+    def _getId(self):
+        """ return the vertice Id """
+        return self.__id
     
-    def isVisited(self):
-        return self.visited
-
-    def setDistance(self, d: int, acc = False):
-        if acc:
-            self.distance += d
-        else:
-            self.distance = d
+    def _getColor(self) -> Color:
+        """ return the vertice color 
+            white - undiscovered
+            gray - discovered
+            black - finished discovering
+        """
+        return self.__color
+        
+    def _getDistance(self):
+        """ return distance from init node """
+        return self.__distance
     
-    def getDistance(self):
-        return self.distance
-
-    def getId(self):
-        return self.id
+    # SETTERS
+    def _setDistnace(self, new_distance : Union[float, int]):
+        """ set the distnace of the vertice"""
+        self.__distance = new_distance
+    
+    def _accDistance(self, acc_distance : Union[float, int]):
+        """ accumulate to the current distance of the vertice """
+        self.__distance += acc_distance
+    
+    def _setColor(self, color: Color):
+        self.__color = color
+    # ETC
 
     def __eq__(self, other): #TODO: might invoke a problem. checks only per id.
         return self.id == other.id
