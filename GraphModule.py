@@ -1,27 +1,25 @@
-from typing import Optional, Union
-from CompEdge import Edge
-from Vertice import V
+from Edge import Edge
+from Vertice import Color, Vertice
 import math
 
-class Graph(V, Edge):
+class Graph(Vertice, Edge):
 
     def __init__(self,
-                        vertices: V = [],
-                        edges: Edge = [],
+                        vertices = [],
+                        edges = [],
                         directed = True,
                         debug = False):
-        # NEED TO CHECK FOR DUPLICATES
+        # settings
         self.debug = debug
         self.directed = directed
+        #structures
+        self.vertices = {}
+        self.edges = {}
+        self.adj = {}
 
-        self.vertices = []
         for vId in vertices:
-            if isinstance(vId,V):
-                self.vertices.append(vId)
-            else:
-                self.vertices.append(V(id=vId))
+            self.vertices[vId] = Vertice(vId)
         
-        self.edges = []
         for e in edges:
             if isinstance(e, Edge):
                 if not self.addEdge(e):
@@ -29,92 +27,113 @@ class Graph(V, Edge):
             else:
                 self.debuger("Graph Constructor", f"{e} is not of type 'Edge'!")
 
-        self.directed = directed
-    
-    def addEdge(self, e: Edge):
+    def __addAdj(self, v1, v2):
+        if v1 in self.adj:
+            self.adj[v1][v2] = self.getVertice(v2)
+        else:
+            self.adj[v1] = {v1: self.getVertice(v2)}
+        
+
+    def addEdge(self, v1, v2, weight = 1) -> bool:
         result = False
-        #sanity check
-        if not isinstance(e,Edge):
-            self.debuger("addEdge",f"{e} is not of type 'Edge'!")
+        c1, c2 = self.vExists(v1), self.vExists(v2)
+        
+        if c1 and c2 :
+            self.edges[(v1,v2)] = Edge(v1,v2,weight)
+            self.__addAdj(v1,v2)
+            result = True
+
+        if not c1:
+            self.debuger("addEdge",f"Vertice {v1} does not exist in graph.")
+        if not c2:
+            self.debuger("addEdge",f"Vertice {v2} does not exist in graph.")       
+        
+        return result
+ 
+    def forceEdge(self, v1, v2, weight = 1):
+        result = False
+        c1, c2 = self.vExists(v1), self.vExists(v2)
+
+        if not c1:
+            self.vertices[v1] = Vertice(v1)
+            self.debuger("forceEdge",f"Vertice {v1} was forced.")        
+
+        if not c2:
+            self.vertices[v2] = Vertice(v2)
+            self.debuger("forceEdge",f"Vertice {v2} was forced.")        
+ 
+        if c1 and c2 :
+            self.edges[(v1,v2)] = Edge(v1,v2,weight)
+            self.__addAdj(v1,v2)
+            result = True
         else:
-            if self.directed: e.setAsDirected()
-            if self.vExists(e.getStartId()) and self.vExists(e.getEndId()) :
-                self.edges.append(e)
-                if not self.directed:
-                    self.edges.append(e.flippedInstance())
-                result = True
+            self.debuger("forceEdge",f"Critical Error!")
+        
         return result
 
-    def forceEdge(self, e: Edge):
-        result = True
-        if self.directed: e.setAsDirected()
-        if not isinstance(e,Edge):
-            print("ERROR")
-            result = False
-        if not e.start in self.vertices:
-            self.vertices.append(V(id=e.start))
-        if not e.end in self.vertices:
-            self.vertices.append(V(id=e.end))
-        if result: self.edges.append(e)
-        return result
+    def popEdge(self, e: tuple) -> bool: 
+        if self.edges.pop(e,None) == None:
+            self.debuger("popEdge",f"Edge with an id {e} does not exist.")
+            return False
+        
+        #remove from adj:
+        (v1, v2) = e
+        if self.adj[v1].pop(v2, None) == None:
+            return False
+        return True
+    
+    def popVertice(self, vId) -> bool: #TODO impl func to check if vertice is slo
+        # check if edges are attached
+        e = self.adj.get(vId, default = None)
+        # TODO:what about edges pointing to self?
+        if e != None:
+            self.debuger("popVertice",f"{vId} was not removed, {e} is attached to it")
+            return False
 
-    def popEdge(self, e: Edge):
-        result = True
-        if e in self.edges:
-            self.edges.remove(e)
-        else:
-            result = False
-        return result
+        if self.edges.pop(vId ,None) == None:
+            self.debuger("popEdge",f"Vertice with an id {vId} does not exist.")
+            return False
+
+        return True
     
-    def popVertice(self, v: V): #problematic( what about connecting edges??)
-        print(f"method implicates errors, do not use!")
-        result = True
-        if v in self.vertices:
-            self.edges.remove(v)
-        else:
-            result = False
-        return result
-    
-    def getUnvisited(self, v_input):
+    def getUnvisited(self, vId) -> list: #of type Vertice
+        
+        #white is defined as unvisited
         lst = []
-        for v in self.vertices:
-            if not v.isVisited() and self.isNeighboors(v_input, v.getId()):
+        adj = self.getAdj(vId)
+        for v in adj:
+            if v.getColor() == Color.white:
                 lst.append(v)
         return lst
 
-    def isNeighboors(self, v_start, v_end):
-        lst = self.NeighboorsOf(v_start)
-        for v in lst:
-            if v.getId() == v_end:
-                return True
-        return False 
+        pass
 
-    def NeighboorsOf(self, v): # TODO method impl is not efficient!
-        lst = []
-        for e in self.edges:
-            if e.getStartId() == v:
-                lst.append(self.getV(e.getEndId()))
-        return lst
+    def isAdj(self, v1, v2) -> bool:
+        """ Returns True if @param v1 and @param v2 are Neighboors,
+            False otherwise."""
+        try:
+            self.adj[v1][v2]
+            return True
+        except KeyError:
+            return False
 
-    def getV(self, vId) -> V:
-        for v in self.vertices:
-            if vId == v.getId():
-                return v
-        self.debuger("getV",f"{v} was not found in graph!")
+    def _getAdj(self, vId) -> list: #of type Vertice
+        """ Returns a list of Neighboors of @param vId"""
+        return self.adj[vId].values()
 
-    def exists(self, object: Union[Edge,V]) -> bool:
-        if isinstance(object,V):
-            return object in self.vertices
-        elif isinstance(object, Edge):
+    def _getVertice(self, vId) -> Vertice:
+        """ Returns Vertice With """
+        try:
+            return self.vertices[vId]
+        except:
+            self.debuger("getVertice",f"{vId} was not found.")
+            raise RuntimeWarning
+
+    def exists(self, object) -> bool:
+        if isinstance(object,tuple):
             return object in self.edges
         else:
-            print(f"object is not of Type Edge or Vertice")
-
-    def vExists(self, id) -> bool:
-        for v in self.vertices:
-            if id == v.getId():
-                return True
-        return False
+            return object in self.vertices
 
     def __repr__(self):
         dict = {}

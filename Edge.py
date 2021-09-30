@@ -8,11 +8,11 @@ class Edge:
         self.__weight = weight
 
     # Getters
-    def _getS(self):
+    def _getStart(self):
         """ get starting vertice Id"""
         return self.start
 
-    def _getE(self):
+    def _getEnd(self):
         """ get ending vertice Id"""
         return self.end    
     
@@ -32,8 +32,11 @@ class Edge:
         return self.__start == self.__end
 
     def __eq__(self,other):
-        raise NotImplemented()
-
+        c1 = self.__start == other.getStart()
+        c2 = self.__end == other.getEnd()
+        c3 = self.__weight == other.getWeight()
+        return c1 and c2 and c3
+        
     def __repr__(self):
         raise NotImplemented()
         #connector = "-->" if self.direction else "--"

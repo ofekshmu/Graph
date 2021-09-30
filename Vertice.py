@@ -6,7 +6,7 @@ class Color(enum):
     gray = "gray",
     white = "white"
 
-class V:
+class Vertice:
     def __init__(self, id):       
         self.__id = id
         self.__color = Color.White
