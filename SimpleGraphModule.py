@@ -25,7 +25,7 @@ class Graph(InformalSimpleGraphInterface):
             if not self.addVertice(v):
                 self.__debuger("Graph Constructor",f"Graph was not created properly:\ntwo or more identical vertices '{v}'.")
         for e in edges:
-            if not self.forceEdge(e):
+            if not self.addEdge(e):
                 self.__debuger("Graph Constructor",f"Graph was not created properly:\nEdge {self.__e_str(e)} was not added.")
 
     def __ValidInsertion(self, e: tuple, force) -> bool:
@@ -178,8 +178,5 @@ class Graph(InformalSimpleGraphInterface):
         string +=20*'-'+"\n"
         return string
 
-
-# need to test function "isNeighboors"
-# make harder tests and check prints
 # remove edge
 # remove vertice

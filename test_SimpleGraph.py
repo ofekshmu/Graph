@@ -90,7 +90,6 @@ def testDirected():
     assert g2.getEdges() == [(1,2),(1,3),(1,4),(1,"five"),("five",4),("five","five")]
     print(g2.getEdges())
 
-
 def test_GrapEX():
     g = Graph(vertices=[1,2,3],edges=[(1,2),(1,3),(3,2),(3,3)],directed=True, debug=True)
     print(g)
@@ -112,6 +111,26 @@ def test_raiseError():
     except RuntimeWarning:
         print("\nError seccssecfuly catched")
 
-    
+def testSimpleGraph():
+    g = Graph(vertices=[1,2,3,4,5,6,7,8], edges=[(1,2),(2,3),(3,4),(6,7),(8,9),(8,1),(7,6),(5,4)],
+    directed=True,duplicates=False,loops=False,debug=True)
+    assert g.exists((1,2))
+    assert g.exists((8,9)) == False
+    assert g.isNeighboors(1,2)
+    assert g.isNeighboors(2,1) == False
+    assert g.isNeighboors(5,6) == False
+    assert g.isNeighboors(6,5) == False
+    assert g.exists(5) and g.exists(8)
+    assert g.exists(9) == False
+    assert g.exists(10) == False
+    assert g.forceEdge((1,9))
+    #except message
+    assert g.exists((1,9)) and g.exists(9)
+    assert g.exists((9,1)) == False
+    assert g.addEdge((9,10)) == False
+    assert g.addEdge((9,9)) == False
+    assert g.addEdge((1,2)) == False
+    assert g.addEdge((2,4)) == True
+
 
 
