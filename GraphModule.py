@@ -21,26 +21,25 @@ class Graph(Vertice, Edge):
             self.vertices[vId] = Vertice(vId)
         
         for e in edges:
-            if isinstance(e, Edge):
-                if not self.addEdge(e):
+            if isinstance(e, tuple):
+                if not self.addEdge(e[0],e[1]):
                     self.debuger("Graph Constructor",f"{e} Was not added!")
             else:
                 self.debuger("Graph Constructor", f"{e} is not of type 'Edge'!")
 
-    def __addAdj(self, v1, v2):
+    def _addAdj(self, v1, v2):
         if v1 in self.adj:
-            self.adj[v1][v2] = self.getVertice(v2)
+            self.adj[v1][v2] = self.vertices[v2]
         else:
-            self.adj[v1] = {v1: self.getVertice(v2)}
+            self.adj[v1] = {v1: self.vertices[v2]}
         
-
     def addEdge(self, v1, v2, weight = 1) -> bool:
         result = False
-        c1, c2 = self.vExists(v1), self.vExists(v2)
+        c1, c2 = self.exists(v1), self.exists(v2)
         
         if c1 and c2 :
             self.edges[(v1,v2)] = Edge(v1,v2,weight)
-            self.__addAdj(v1,v2)
+            self._addAdj(v1,v2)
             result = True
 
         if not c1:
@@ -50,6 +49,9 @@ class Graph(Vertice, Edge):
         
         return result
  
+
+
+
     def forceEdge(self, v1, v2, weight = 1):
         result = False
         c1, c2 = self.vExists(v1), self.vExists(v2)
@@ -64,7 +66,7 @@ class Graph(Vertice, Edge):
  
         if c1 and c2 :
             self.edges[(v1,v2)] = Edge(v1,v2,weight)
-            self.__addAdj(v1,v2)
+            self._addAdj(v1,v2)
             result = True
         else:
             self.debuger("forceEdge",f"Critical Error!")
@@ -100,7 +102,7 @@ class Graph(Vertice, Edge):
         
         #white is defined as unvisited
         lst = []
-        adj = self.getAdj(vId)
+        adj = self.__getAdj(vId)
         for v in adj:
             if v.getColor() == Color.white:
                 lst.append(v)
@@ -117,11 +119,11 @@ class Graph(Vertice, Edge):
         except KeyError:
             return False
 
-    def _getAdj(self, vId) -> list: #of type Vertice
+    def __getAdj(self, vId) -> list: #of type Vertice
         """ Returns a list of Neighboors of @param vId"""
         return self.adj[vId].values()
 
-    def _getVertice(self, vId) -> Vertice:
+    def __getVertice(self, vId) -> Vertice:
         """ Returns Vertice With """
         try:
             return self.vertices[vId]
@@ -129,55 +131,31 @@ class Graph(Vertice, Edge):
             self.debuger("getVertice",f"{vId} was not found.")
             raise RuntimeWarning
 
-    def exists(self, object) -> bool:
+    def exists(self, object) -> bool: #TODO change implemantation
         if isinstance(object,tuple):
             return object in self.edges
         else:
             return object in self.vertices
 
     def __repr__(self):
-        dict = {}
-        for v in self.vertices:
-            dict[v.id] = []
-        for e in self.edges:
-            dict[e.getStartId()].append(e.getEndId())
-
+        print(self.adj)
         str = ""
-        for k,v in dict.items():
-            str += f"{k} --> "
-            for vertice in v:
-                str += f"{vertice},"
-            str = str[:-1] +"\n"
+        for vId in self.vertices.keys():
+            str += f"\t{vId} -->"
+            for vId2 in self.adj[vId].keys():
+                str += f" {vId2},"
+            str += "\n"
+
         return str
+
+
+#---------------------------------------
     
     def debuger(self, function :str, message :str):
         if self.debug: 
             print("\n",10*'~',f" Message in Graph Infrustructure -> {function} ",10*'~',"\n",message,"\n")
 
-    def getRaw(self):
-        return [self.edges,self.vertices]
-    
-    def getWeight(self, e: Edge):
-        for e_g in self.edges:
-            if e == e_g:
-                return e_g.getWeight()
-    
-    def setWeight(self, e: Edge, w):
-        for e_g in self.edges:
-            if e == e_g:
-                e_g.setWeight(w)
-                return True
-        return False
-
-    def visit(self, v):
-        self.getV(v).visit()
-    
-    def getDistanceV(self, v):
-        return self.getV(v).getDistance()
-
-    def setDistanceV(self, v, d):
-        return self.getV(v).setDistance(d)
-
+#---------------------------------------
     def dijkstra_Init(self, init):
         for v in self.vertices:
             v.unvisit()

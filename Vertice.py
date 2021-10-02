@@ -1,7 +1,8 @@
 import math
-import enum
+from enum import Enum
 from typing import Union
-class Color(enum):
+
+class Color(Enum):
     black = "black",
     gray = "gray",
     white = "white"
@@ -9,7 +10,7 @@ class Color(enum):
 class Vertice:
     def __init__(self, id):       
         self.__id = id
-        self.__color = Color.White
+        self.__color = Color.white
         self.__distance = math.inf
 
     # GETTERS
