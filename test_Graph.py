@@ -7,3 +7,5 @@ def test_session_one():
     assert g.exists((1,2)) and g.exists((2,3)) and g.exists((5,4)) and g.exists((4,3))
     assert not g.exists(6) and not g.exists((3,2))
     print(g)
+
+test_session_one()

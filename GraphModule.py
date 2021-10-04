@@ -18,7 +18,7 @@ class Graph(Vertice, Edge):
         self.adj = {}
 
         for vId in vertices:
-            self.vertices[vId] = Vertice(vId)
+            self.addVertive(vId)
         
         for e in edges:
             if isinstance(e, tuple):
@@ -27,11 +27,15 @@ class Graph(Vertice, Edge):
             else:
                 self.debuger("Graph Constructor", f"{e} is not of type 'Edge'!")
 
+    def addVertice(self, vId) -> bool:
+        self.vertices[vId] = Vertice(vId)
+        #TODO: check if exist, add to adj
+
     def _addAdj(self, v1, v2):
         if v1 in self.adj:
             self.adj[v1][v2] = self.vertices[v2]
         else:
-            self.adj[v1] = {v1: self.vertices[v2]}
+            self.adj[v1] = {v2: self.vertices[v2]}
         
     def addEdge(self, v1, v2, weight = 1) -> bool:
         result = False

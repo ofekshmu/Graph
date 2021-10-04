@@ -14,23 +14,30 @@ class Vertice:
         self.__distance = math.inf
 
     # GETTERS
-    def _getId(self):
+    @property
+    def id(self):
         """ return the vertice Id """
         return self.__id
     
-    def _getColor(self) -> Color:
+    @property
+    def color(self) -> Color:
         """ return the vertice color 
             white - undiscovered
             gray - discovered
             black - finished discovering
         """
         return self.__color
-        
-    def _getDistance(self):
+    
+    @color.setter
+    def color(self, color: Color):
+        self.__color = color
+    
+    @property    
+    def distance(self):
         """ return distance from init node """
         return self.__distance
     
-    # SETTERS
+    @distance.setter
     def _setDistnace(self, new_distance : Union[float, int]):
         """ set the distnace of the vertice"""
         self.__distance = new_distance
@@ -38,13 +45,11 @@ class Vertice:
     def _accDistance(self, acc_distance : Union[float, int]):
         """ accumulate to the current distance of the vertice """
         self.__distance += acc_distance
-    
-    def _setColor(self, color: Color):
-        self.__color = color
+
     # ETC
 
     def __eq__(self, other): #TODO: might invoke a problem. checks only per id.
-        return self.id == other.id
+        return self.__id == other.id
 
     def __repr__(self):
-        return f"'{self.id}'"
+        return f"'{self.__id}'"
