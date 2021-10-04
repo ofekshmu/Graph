@@ -18,7 +18,7 @@ class Graph(Vertice, Edge):
         self.adj = {}
 
         for vId in vertices:
-            self.addVertive(vId)
+            self.addVertice(vId)
         
         for e in edges:
             if isinstance(e, tuple):
@@ -28,8 +28,12 @@ class Graph(Vertice, Edge):
                 self.debuger("Graph Constructor", f"{e} is not of type 'Edge'!")
 
     def addVertice(self, vId) -> bool:
-        self.vertices[vId] = Vertice(vId)
-        #TODO: check if exist, add to adj
+        if self.exists(vId):
+            self.debuger("addVertice","A vertice with {vId} already exists.")
+            return False
+        else:
+            self.vertices[vId] = Vertice(vId)
+            self.adj[vId] = {}
 
     def _addAdj(self, v1, v2):
         if v1 in self.adj:
@@ -142,12 +146,12 @@ class Graph(Vertice, Edge):
             return object in self.vertices
 
     def __repr__(self):
-        print(self.adj)
         str = ""
         for vId in self.vertices.keys():
             str += f"\t{vId} -->"
             for vId2 in self.adj[vId].keys():
                 str += f" {vId2},"
+            str = str[:-1]
             str += "\n"
 
         return str
