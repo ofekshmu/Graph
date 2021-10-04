@@ -29,11 +29,12 @@ class Graph(Vertice, Edge):
 
     def addVertice(self, vId) -> bool:
         if self.exists(vId):
-            self.debuger("addVertice","A vertice with {vId} already exists.")
+            self.debuger("addVertice",f"Failed inserting '{vId}', a vertice with id {vId} already exists.")
             return False
         else:
             self.vertices[vId] = Vertice(vId)
             self.adj[vId] = {}
+            return True
 
     def _addAdj(self, v1, v2):
         if v1 in self.adj:
@@ -51,35 +52,29 @@ class Graph(Vertice, Edge):
             result = True
 
         if not c1:
-            self.debuger("addEdge",f"Vertice {v1} does not exist in graph.")
+            self.debuger("addEdge",f"Failed inserting ({v1},{v2}), Vertice {v1} does not exist in graph.")
         if not c2:
-            self.debuger("addEdge",f"Vertice {v2} does not exist in graph.")       
+            self.debuger("addEdge",f"Failed inserting ({v1},{v2}), Vertice {v2} does not exist in graph.")       
         
         return result
- 
-
-
 
     def forceEdge(self, v1, v2, weight = 1):
-        result = False
-        c1, c2 = self.vExists(v1), self.vExists(v2)
+        if not self.exists((v1,v2)):    
+            c1, c2 = self.exists(v1), self.exists(v2)
 
-        if not c1:
-            self.vertices[v1] = Vertice(v1)
-            self.debuger("forceEdge",f"Vertice {v1} was forced.")        
+            if not c1:
+                self.addVertice(v1)
+                self.debuger("forceEdge",f"Vertice {v1} was forced.")        
 
-        if not c2:
-            self.vertices[v2] = Vertice(v2)
-            self.debuger("forceEdge",f"Vertice {v2} was forced.")        
- 
-        if c1 and c2 :
+            if not c2:
+                self.addVertice(v2)
+                self.debuger("forceEdge",f"Vertice {v2} was forced.")        
+    
             self.edges[(v1,v2)] = Edge(v1,v2,weight)
             self._addAdj(v1,v2)
-            result = True
-        else:
-            self.debuger("forceEdge",f"Critical Error!")
-        
-        return result
+            return True
+        self.debuger("forceEdge",f"Edge ({v1},{v2}) already exists.")        
+        return False
 
     def popEdge(self, e: tuple) -> bool: 
         if self.edges.pop(e,None) == None:
@@ -146,12 +141,12 @@ class Graph(Vertice, Edge):
             return object in self.vertices
 
     def __repr__(self):
-        str = ""
+        str = "Graph:\n"
         for vId in self.vertices.keys():
-            str += f"\t{vId} -->"
+            str += f"\t{vId} -->  "
             for vId2 in self.adj[vId].keys():
-                str += f" {vId2},"
-            str = str[:-1]
+                str += f"{vId2}, "
+            str = str[:-2]
             str += "\n"
 
         return str

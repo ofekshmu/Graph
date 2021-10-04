@@ -8,19 +8,23 @@ class Edge:
         self.__weight = weight
 
     # Getters
-    def _getStart(self):
+    @property
+    def start(self):
         """ get starting vertice Id"""
-        return self.start
+        return self.__start
 
-    def _getEnd(self):
+    @property    
+    def end(self):
         """ get ending vertice Id"""
-        return self.end    
+        return self.__end    
     
-    def _getWeight(self) -> Union[int, float]:
+    @property
+    def weight(self) -> Union[int, float]:
         """ get Weight of the edge"""
-        return self.weight
-    # Setters
-    def _setWeight(self, new_Weight: Union[int, float]):
+        return self.__weight
+    
+    @weight.setter
+    def weight(self, new_Weight: Union[int, float]):
         """ resets the value of weight to @new_Weight"""
         self.__weight = new_Weight
 
@@ -32,9 +36,11 @@ class Edge:
         return self.__start == self.__end
 
     def __eq__(self,other):
-        c1 = self.__start == other.getStart()
-        c2 = self.__end == other.getEnd()
-        c3 = self.__weight == other.getWeight()
+        if not isinstance(other, Edge):
+            return False
+        c1 = self.__start == other.start
+        c2 = self.__end == other.end
+        c3 = self.__weight == other.weight
         return c1 and c2 and c3
         
     def __repr__(self):

@@ -49,6 +49,8 @@ class Vertice:
     # ETC
 
     def __eq__(self, other): #TODO: might invoke a problem. checks only per id.
+        if not isinstance(other, Vertice):
+            return False
         return self.__id == other.id
 
     def __repr__(self):
