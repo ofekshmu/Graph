@@ -46,6 +46,8 @@ class Vertice:
         """ accumulate to the current distance of the vertice """
         self.__distance += acc_distance
 
+    def isUnvisited(self):
+        return self.__color == Color.white
     # ETC
 
     def __eq__(self, other): #TODO: might invoke a problem. checks only per id.

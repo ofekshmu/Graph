@@ -1,5 +1,6 @@
 from Edge import Edge
 from Vertice import Color, Vertice
+from typing import List
 import math
 
 class Graph(Vertice, Edge):
@@ -101,17 +102,13 @@ class Graph(Vertice, Edge):
 
         return True
     
-    def getUnvisited(self, vId) -> list: #of type Vertice
-        
+    def getUnvisited(self, vId = None) -> list: #of type Vertice
+        if vId is None:
+            return [v for v in self.vertices.values() if v.isUnvisited()]
         #white is defined as unvisited
-        lst = []
         adj = self.__getAdj(vId)
-        for v in adj:
-            if v.getColor() == Color.white:
-                lst.append(v)
-        return lst
+        return [v for v in adj if v.isUnvisited()]
 
-        pass
 
     def isAdj(self, v1, v2) -> bool:
         """ Returns True if @param v1 and @param v2 are Neighboors,
@@ -122,7 +119,7 @@ class Graph(Vertice, Edge):
         except KeyError:
             return False
 
-    def __getAdj(self, vId) -> list: #of type Vertice
+    def __getAdj(self, vId) -> List[Vertice]: #of type Vertice
         """ Returns a list of Neighboors of @param vId"""
         return self.adj[vId].values()
 
@@ -150,6 +147,9 @@ class Graph(Vertice, Edge):
             str += "\n"
 
         return str
+
+#--------------------------------------- Vertice related
+    
 
 
 #---------------------------------------

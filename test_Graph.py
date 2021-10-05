@@ -29,4 +29,15 @@ def test_session_one():
     assert not g.popEdge((20,21))
     assert not g.popEdge((6,7))
     print(g)
-test_session_one()
+
+def test_session_two():
+    g = Graph(vertices=[1,2,3],edges=[(1,2),(2,3)],directed=True,debug=True)
+    print(g)
+    print(g.getUnvisited()) # 1,2,3
+    print(g.getUnvisited(1)) # 2
+    print(g.getUnvisited(3)) # empty
+    assert g.isAdj(1,2) and g.isAdj(2,3)
+    assert not g.isAdj(1,4) # non existing vertice
+    assert not g.isAdj(2,1) # opposite direction 
+    assert not g.isAdj(5,6) # both non existing
+
