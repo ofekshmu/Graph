@@ -88,19 +88,19 @@ class Graph(Vertice, Edge):
             return False
         return True
     
-    def popVertice(self, vId) -> bool: #TODO impl func to check if vertice is slo
-        # check if edges are attached
-        e = self.adj.get(vId, default = None)
-        # TODO:what about edges pointing to self?
-        if e != None:
-            self.debuger("popVertice",f"{vId} was not removed, {e} is attached to it")
-            return False
+    # def popVertice(self, vId) -> bool: #TODO impl func to check if vertice is slo
+    #     # check if edges are attached
+    #     e = self.adj.get(vId, default = None)
+    #     # TODO:what about edges pointing to self?
+    #     if e != None:
+    #         self.debuger("popVertice",f"{vId} was not removed, {e} is attached to it")
+    #         return False
 
-        if self.edges.pop(vId ,None) == None:
-            self.debuger("popEdge",f"Vertice with an id {vId} does not exist.")
-            return False
+    #     if self.edges.pop(vId ,None) == None:
+    #         self.debuger("popEdge",f"Vertice with an id {vId} does not exist.")
+    #         return False
 
-        return True
+    #     return True
     
     def getUnvisited(self, vId = None) -> list: #of type Vertice
         if vId is None:
@@ -151,7 +151,12 @@ class Graph(Vertice, Edge):
 #--------------------------------------- Vertice related
     
 
-
+#--------------------------------------- Graph Extensions related
+    def _getEdges(self):
+        return list(self.edges.values())
+    
+    def _getVerticeIds(self):
+        return list(self.vertices.keys())
 #---------------------------------------
     
     def debuger(self, function :str, message :str):

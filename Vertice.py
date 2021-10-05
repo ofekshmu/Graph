@@ -38,7 +38,7 @@ class Vertice:
         return self.__distance
     
     @distance.setter
-    def _setDistnace(self, new_distance : Union[float, int]):
+    def distance(self, new_distance : Union[float, int]):
         """ set the distnace of the vertice"""
         self.__distance = new_distance
     

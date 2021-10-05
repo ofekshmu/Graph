@@ -1,3 +1,4 @@
+from GraphExtensions import AdjMatrix
 from GraphModule import Graph
 #from GraphExtensions import Path
 
@@ -41,3 +42,7 @@ def test_session_two():
     assert not g.isAdj(2,1) # opposite direction 
     assert not g.isAdj(5,6) # both non existing
 
+def test_adjMatrix():
+    g = Graph(vertices=[1,2,3],edges=[(1,2),(2,3)],directed=True,debug=True)
+    print(AdjMatrix.get(g))
+    print(AdjMatrix.getString(g))
