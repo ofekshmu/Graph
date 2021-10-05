@@ -109,7 +109,6 @@ class Graph(Vertice, Edge):
         adj = self.__getAdj(vId)
         return [v for v in adj if v.isUnvisited()]
 
-
     def isAdj(self, v1, v2) -> bool:
         """ Returns True if @param v1 and @param v2 are Neighboors,
             False otherwise."""
@@ -123,6 +122,7 @@ class Graph(Vertice, Edge):
         """ Returns a list of Neighboors of @param vId"""
         return self.adj[vId].values()
 
+    #TODO: not used
     def __getVertice(self, vId) -> Vertice:
         """ Returns Vertice With """
         try:
