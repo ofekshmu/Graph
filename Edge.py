@@ -32,16 +32,13 @@ class Edge:
         """ adds @acc_Weight to the current edge weight"""
         self.__weight += acc_Weight
     # ETC
-    def isLoop(self):
+    def isLoop(self) -> bool:
         return self.__start == self.__end
 
     def __eq__(self,other):
-        if not isinstance(other, Edge):
+        if other is None:
             return False
-        c1 = self.__start == other.start
-        c2 = self.__end == other.end
-        c3 = self.__weight == other.weight
-        return c1 and c2 and c3
+        return self.__start == other.start and self.__end == other.end
         
     def __repr__(self):
         raise NotImplemented()

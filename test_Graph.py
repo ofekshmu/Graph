@@ -1,7 +1,6 @@
 from GraphExtensions import AdjMatrix, Path
 from GraphModule import Graph
 import math
-#from GraphExtensions import Path
 
 def test_session_one():
     g = Graph(vertices=[1,2,3,4,5], edges=[(1,2),(2,3),(5,4),(4,3)],directed=True,debug=True)
@@ -51,10 +50,12 @@ def test_adjMatrix():
 def test_dijkstra():
     g = Graph(vertices=[1,2,3,4,5],edges=[(1,2),(1,3),(4,5),(2,3),(3,4)],directed=True,debug=True)
     print(g)
-    p = Path()
-    assert p.dijkstra(g,1,4) == 2
-    assert p.dijkstra(g,4,1) == math.inf
+    assert Path.dijkstra(g,1,4,debug=False) == 2
+    assert Path.dijkstra(g,4,1) == math.inf
     assert g.popEdge((1,3))
-    assert p.dijkstra(g,1,4) == 3
+    assert Path.dijkstra(g,1,4) == 3
     assert g.popEdge((2,3))
-    assert p.dijkstra(g,1,4) == math.inf
+    assert Path.dijkstra(g,1,4) == math.inf
+    assert Path.dijkstra(g,2,5) == math.inf
+    assert Path.dijkstra(g,3,5) == 2
+    print(g)

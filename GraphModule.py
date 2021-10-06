@@ -102,7 +102,7 @@ class Graph(Vertice, Edge):
 
     #     return True
     
-    def getUnvisited(self, vId = None) -> List[Vertice]: #of type Vertice
+    def getUnvisited(self, vId = None) -> list: #list contains vertice Ids
         if vId is None:
             return [v.id for v in self.vertices.values() if v.isUnvisited()]
         #white is defined as unvisited
@@ -122,16 +122,8 @@ class Graph(Vertice, Edge):
         """ Returns a list of Neighboors of @param vId"""
         return self.adj[vId].values()
 
-    def getAdj(self, vId):
+    def getAdj(self, vId) -> list: #list contains vertice Ids
         return [v.id for v in self.__getAdj(vId)]
-    #TODO: not used
-    def __getVertice(self, vId) -> Vertice:
-        """ Returns Vertice With """
-        try:
-            return self.vertices[vId]
-        except:
-            self.debuger("getVertice",f"{vId} was not found.")
-            raise RuntimeWarning
 
     def exists(self, object) -> bool: #TODO change implemantation
         if isinstance(object,tuple):
@@ -140,7 +132,7 @@ class Graph(Vertice, Edge):
             return object in self.vertices
 
     def __repr__(self):
-        str = "Graph:\n"
+        str = "\nGraph:\n"
         for vId in self.vertices.keys():
             str += f"\t{vId} -->  "
             for vId2 in self.adj[vId].keys():
@@ -173,7 +165,7 @@ class Graph(Vertice, Edge):
     
     def debuger(self, function :str, message :str):
         if self.debug: 
-            print("\n",10*'~',f" Message in Graph Infrustructure -> {function} ",10*'~',"\n",message,"\n")
+            print("\n",10*'~ ',f" Message in Graph Infrustructure -> {function} ",10*'~ ',"\n",message,"\n")
 
 #---------------------------------------
     def dijkstra_Init(self, init):

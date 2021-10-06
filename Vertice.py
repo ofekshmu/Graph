@@ -30,7 +30,10 @@ class Vertice:
     
     @color.setter
     def color(self, color: Color):
-        self.__color = color
+        if isinstance(color, Color):
+            self.__color = color
+        else:
+            raise ValueError
     
     @property    
     def distance(self):
@@ -47,16 +50,16 @@ class Vertice:
         self.__distance += acc_distance
 
     def isUnvisited(self):
-        return self.__color == Color.white
+        return self.color == Color.white
     
     def unvisit(self):
         self.color = Color.white
     # ETC
 
-    def __eq__(self, other): #TODO: might invoke a problem. checks only per id.
-        if not isinstance(other, Vertice):
+    def __eq__(self, other): # equality is determined by id only
+        if other is None:
             return False
         return self.__id == other.id
-
+        
     def __repr__(self):
         return f"'{self.__id}'"

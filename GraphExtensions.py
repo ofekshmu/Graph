@@ -1,6 +1,5 @@
 from GraphModule import Graph
 import numpy as np
-import math
 
 class AdjMatrix(Graph):
     
@@ -22,6 +21,7 @@ class AdjMatrix(Graph):
 
         return matrix , index_dict
     
+    @staticmethod
     def getString(graph: Graph = None) -> str:
         """ @param get_result is the returned value of the function get of the AdjMatrix class. 
             @returns a string representing the Adjacency matrix
@@ -45,32 +45,29 @@ class AdjMatrix(Graph):
 
 class Path(Graph):
 
-        
-    def __init__(self):
-        pass
-
-    def _dijkstraRec(self, g: Graph, init, end):
-        #---- for debugging --------
-        print(f"init: {init}, distance: {g.getDistance(init)}, neighboors: {g.getAdj(init)}")
-        print(g)
-        # --------------------------
+    #PRIVATE -  not part of API
+    def __dijkstraRec(g: Graph, init, end, debug, itr):
         unvisited = g.getUnvisited(init)
         for vId in unvisited:
             acc_distance = g.getDistance(init) + g.getWeight(init, vId)
             if acc_distance < g.getDistance(vId):
                 g.setDistance(vId, acc_distance)
-        #---- for debugging --------
-        for v in unvisited:
-            print(f"current distance for {v} is {g.getDistance(v)}")
+        #---- for debugging ---------------------------------------------
+        if debug:
+            print("\n",5*"- ",f"iteration {itr}",5*"- ",f"\ninitId: {init}, distance: {g.getDistance(init)}, neighboors: {g.getAdj(init)}\n",g)
+            for v in unvisited:
+                print(f"updated distance for {v} is {g.getDistance(v)}")
+        #----------------------------------------------------------------
         g.visit(init)
         for v in unvisited:
             if v != end:
-                self._dijkstraRec(g, v, end)        
+                Path.__dijkstraRec(g, v, end, debug, itr +1)        
 
-
-    def dijkstra(self, g: Graph, init, end) -> list:
+    @staticmethod
+    def dijkstra(g: Graph, init, end, debug = False) -> list:
         g.dijkstra_Init(init)
-        self._dijkstraRec(g, init, end)
+        Path.__dijkstraRec(g, init, end, debug, 0)
+        if debug: print("\ndijkstra debugger ended.\n",20*"- ")
         return g.getDistance(end)
 
             
