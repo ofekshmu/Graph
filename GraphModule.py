@@ -102,12 +102,12 @@ class Graph(Vertice, Edge):
 
     #     return True
     
-    def getUnvisited(self, vId = None) -> list: #of type Vertice
+    def getUnvisited(self, vId = None) -> List[Vertice]: #of type Vertice
         if vId is None:
-            return [v for v in self.vertices.values() if v.isUnvisited()]
+            return [v.id for v in self.vertices.values() if v.isUnvisited()]
         #white is defined as unvisited
         adj = self.__getAdj(vId)
-        return [v for v in adj if v.isUnvisited()]
+        return [v.id for v in adj if v.isUnvisited()]
 
     def isAdj(self, v1, v2) -> bool:
         """ Returns True if @param v1 and @param v2 are Neighboors,
@@ -122,6 +122,8 @@ class Graph(Vertice, Edge):
         """ Returns a list of Neighboors of @param vId"""
         return self.adj[vId].values()
 
+    def getAdj(self, vId):
+        return [v.id for v in self.__getAdj(vId)]
     #TODO: not used
     def __getVertice(self, vId) -> Vertice:
         """ Returns Vertice With """
@@ -149,7 +151,17 @@ class Graph(Vertice, Edge):
         return str
 
 #--------------------------------------- Vertice related
+    def getDistance(self, vId):
+        return self.vertices[vId].distance
     
+    def setDistance(self, vId, d):
+        self.vertices[vId].distance = d
+
+    def visit(self, vId):
+        self.vertices[vId].color = Color.gray
+#--------------------------------------- Edge related
+    def getWeight(self, v1, v2):
+        return self.edges[(v1,v2)].weight
 
 #--------------------------------------- Graph Extensions related
     def _getEdges(self):
@@ -165,8 +177,8 @@ class Graph(Vertice, Edge):
 
 #---------------------------------------
     def dijkstra_Init(self, init):
-        for v in self.vertices:
+        for v in self.vertices.values():
             v.unvisit()
-            v.setDistance(math.inf,acc=False)
-        self.getV(init).setDistance(0, acc=False)
+            v.distance = math.inf
+        self.vertices[init].distance = 0
 

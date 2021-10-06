@@ -1,5 +1,6 @@
-from GraphExtensions import AdjMatrix
+from GraphExtensions import AdjMatrix, Path
 from GraphModule import Graph
+import math
 #from GraphExtensions import Path
 
 def test_session_one():
@@ -43,6 +44,17 @@ def test_session_two():
     assert not g.isAdj(5,6) # both non existing
 
 def test_adjMatrix():
-    g = Graph(vertices=[1,2,3],edges=[(1,2),(2,3)],directed=True,debug=True)
-    print(AdjMatrix.get(g))
+    g = Graph(vertices=[1,2,3,4,5],edges=[(1,2),(1,3),(4,5),(2,3)],directed=True,debug=True)
+    print(AdjMatrix.get(g)[0])
     print(AdjMatrix.getString(g))
+
+def test_dijkstra():
+    g = Graph(vertices=[1,2,3,4,5],edges=[(1,2),(1,3),(4,5),(2,3),(3,4)],directed=True,debug=True)
+    print(g)
+    p = Path()
+    assert p.dijkstra(g,1,4) == 2
+    assert p.dijkstra(g,4,1) == math.inf
+    assert g.popEdge((1,3))
+    assert p.dijkstra(g,1,4) == 3
+    assert g.popEdge((2,3))
+    assert p.dijkstra(g,1,4) == math.inf

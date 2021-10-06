@@ -48,6 +48,9 @@ class Vertice:
 
     def isUnvisited(self):
         return self.__color == Color.white
+    
+    def unvisit(self):
+        self.color = Color.white
     # ETC
 
     def __eq__(self, other): #TODO: might invoke a problem. checks only per id.

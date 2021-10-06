@@ -51,27 +51,27 @@ class Path(Graph):
 
     def _dijkstraRec(self, g: Graph, init, end):
         #---- for debugging --------
-        print(f"init: {init}, distance: {g.getDistanceV(init)}, neighboors: {g.NeighboorsOf(init)}")
+        print(f"init: {init}, distance: {g.getDistance(init)}, neighboors: {g.getAdj(init)}")
         print(g)
         # --------------------------
         unvisited = g.getUnvisited(init)
-        for v in unvisited:
-            acc_distance = g.getDistanceV(init) + g.getWeight(Edge(init,v.getId()))
-            if acc_distance < g.getDistanceV(v.getId()):
-                g.setDistanceV(v.getId(), acc_distance)
+        for vId in unvisited:
+            acc_distance = g.getDistance(init) + g.getWeight(init, vId)
+            if acc_distance < g.getDistance(vId):
+                g.setDistance(vId, acc_distance)
         #---- for debugging --------
         for v in unvisited:
-            print(f"current distance for {v} is {v.getDistance()}")
+            print(f"current distance for {v} is {g.getDistance(v)}")
         g.visit(init)
         for v in unvisited:
-            if v.getId() != end:
-                self._dijkstraRec(g, v.getId(), end)        
+            if v != end:
+                self._dijkstraRec(g, v, end)        
 
 
     def dijkstra(self, g: Graph, init, end) -> list:
         g.dijkstra_Init(init)
         self._dijkstraRec(g, init, end)
-        return g.getDistanceV(end)
+        return g.getDistance(end)
 
             
 
