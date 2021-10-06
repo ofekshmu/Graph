@@ -118,10 +118,6 @@ class Graph(Vertice, Edge):
         except KeyError:
             return False
 
-    def __getAdj(self, vId) -> List[Vertice]: #of type Vertice
-        """ Returns a list of Neighboors of @param vId"""
-        return self.adj[vId].values()
-
     def getAdj(self, vId) -> list: #list contains vertice Ids
         return [v.id for v in self.__getAdj(vId)]
 
@@ -142,7 +138,16 @@ class Graph(Vertice, Edge):
 
         return str
 
-#--------------------------------------- Vertice related
+# --------------------------------- 
+#       Private Functions
+# --------------------------------- 
+    def __getAdj(self, vId) -> List[Vertice]: #of type Vertice
+        """ Returns a list of Neighboors of @param vId"""
+        return self.adj[vId].values()
+
+# --------------------------------- 
+#       Vertice related Functions
+# ---------------------------------     
     def getDistance(self, vId):
         return self.vertices[vId].distance
     
@@ -151,26 +156,30 @@ class Graph(Vertice, Edge):
 
     def visit(self, vId):
         self.vertices[vId].color = Color.gray
-#--------------------------------------- Edge related
+# --------------------------------- 
+#       Edge related Functions
+# ---------------------------------      
     def getWeight(self, v1, v2):
         return self.edges[(v1,v2)].weight
 
-#--------------------------------------- Graph Extensions related
+# --------------------------------- 
+#       Extensions related Functions
+# ---------------------------------   
     def _getEdges(self):
         return list(self.edges.values())
     
     def _getVerticeIds(self):
         return list(self.vertices.keys())
+
+    def _dijkstra_Init(self, init):
+        for v in self.vertices.values():
+            v.unvisit()
+            v.distance = math.inf
+        self.vertices[init].distance = 0
 #---------------------------------------
     
     def debuger(self, function :str, message :str):
         if self.debug: 
             print("\n",10*'~ ',f" Message in Graph Infrustructure -> {function} ",10*'~ ',"\n",message,"\n")
 
-#---------------------------------------
-    def dijkstra_Init(self, init):
-        for v in self.vertices.values():
-            v.unvisit()
-            v.distance = math.inf
-        self.vertices[init].distance = 0
 

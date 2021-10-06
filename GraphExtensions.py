@@ -65,7 +65,7 @@ class Path(Graph):
 
     @staticmethod
     def dijkstra(g: Graph, init, end, debug = False) -> list:
-        g.dijkstra_Init(init)
+        g._dijkstra_Init(init)
         Path.__dijkstraRec(g, init, end, debug, 0)
         if debug: print("\ndijkstra debugger ended.\n",20*"- ")
         return g.getDistance(end)
