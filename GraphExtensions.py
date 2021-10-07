@@ -1,3 +1,4 @@
+from typing import Union
 from GraphModule import Graph
 import numpy as np
 
@@ -47,6 +48,15 @@ class Path(Graph):
 
     #PRIVATE -  not part of API
     def __dijkstraRec(g: Graph, init, end, debug, itr):
+        """ 
+            *Inner Function for Private use.
+            @param g : object of Type Graph.
+            @param init: Id of first Vertice in path.
+            @param end: Id of Last VBertice in path.
+            @param debug: Turn on/off prints.
+            @param itr: indicates the current recursive call, can be seen in debug mode.
+            Calculates minimal distances over graph @g.
+        """
         unvisited = g.getUnvisited(init)
         for vId in unvisited:
             acc_distance = g.getDistance(init) + g.getWeight(init, vId)
@@ -64,11 +74,21 @@ class Path(Graph):
                 Path.__dijkstraRec(g, v, end, debug, itr +1)        
 
     @staticmethod
-    def dijkstra(g: Graph, init, end, debug = False) -> list:
+    def dijkstra(g: Graph, init, end, debug = False):
+        """
+            @param g : object of Type Graph.
+            @param init: Id of first Vertice in path.
+            @param end: Id of Last VBertice in path.
+            @param debug: Turn on/off prints.
+            @Returns the minimal distance from @init to @end, if no path was found, returns math.inf.     
+        """
         g._dijkstra_Init(init)
         Path.__dijkstraRec(g, init, end, debug, 0)
         if debug: print("\ndijkstra debugger ended.\n",20*"- ")
         return g.getDistance(end)
+
+
+# what about setting edges weight
 
             
 

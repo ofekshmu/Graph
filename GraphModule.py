@@ -38,13 +38,24 @@ class Graph(Vertice, Edge):
             return True
         
     def addEdge(self, v1, v2, weight = 1) -> bool:
+        """
+            @param v1: pointing vertice Id.
+            @param v2: pointed vertice Id.
+            @weight: numerical weight value.
+            Adds edge (@v1,@v2) to the graph. 
+            Returns True when successful, otherwise, False
+            if edge exists in graph.
+        """
         result = False
         c1, c2 = self.exists(v1), self.exists(v2)
         
         if c1 and c2 :
-            self.edges[(v1,v2)] = Edge(v1,v2,weight)
-            self.__addAdj(v1,v2)
-            result = True
+            if self.exists((v1,v2)):
+                self.debuger("addEdge",f"Edge ({v1},{v2}), already exists!.")   
+            else:
+                self.edges[(v1,v2)] = Edge(v1,v2,weight)
+                self.__addAdj(v1,v2)
+                result = True
 
         if not c1:
             self.debuger("addEdge",f"Failed inserting ({v1},{v2}), Vertice {v1} does not exist in graph.")
@@ -54,6 +65,14 @@ class Graph(Vertice, Edge):
         return result
 
     def forceEdge(self, v1, v2, weight = 1) -> bool:
+        """
+            @param v1: pointing vertice Id.
+            @param v2: pointed vertice Id.
+            @weight: numerical weight value.
+            Adds edge (@v1,@v2) to the graph. Upon missing vertices, adds
+            one or both of them. Returns True when successful, otherwise, False
+            if edge exists in graph.
+        """
         if not self.exists((v1,v2)):    
             c1, c2 = self.exists(v1), self.exists(v2)
 
@@ -66,12 +85,16 @@ class Graph(Vertice, Edge):
                 self.debuger("forceEdge",f"Vertice {v2} was forced.")        
     
             self.edges[(v1,v2)] = Edge(v1,v2,weight)
-            self.___addAdj(v1,v2)
+            self.__addAdj(v1,v2)
             return True
         self.debuger("forceEdge",f"Edge ({v1},{v2}) already exists.")        
         return False
 
     def popEdge(self, e: tuple) -> bool: 
+        """
+            @param e: an Edge in a tuple form: (v1,v2).
+            Removes edge @e from graph and returns True if succesfell
+        """
         if self.edges.pop(e,None) == None:
             self.debuger("popEdge",f"Edge with an id {e} does not exist.")
             return False
@@ -97,15 +120,23 @@ class Graph(Vertice, Edge):
     #     return True
     
     def getUnvisited(self, vId = None) -> list: #list contains vertice Ids
+        """
+            @param vId: Id of Vertice.
+            @Returns Ids list of unvisited Neighboors of @vId. If @vId is None,
+            than returns all Unvisited Vertices Ids in the graph.
+        """
         if vId is None:
             return [v.id for v in self.vertices.values() if v.isUnvisited()]
-        #white is defined as unvisited
         adj = self.__getAdj(vId)
         return [v.id for v in adj if v.isUnvisited()]
 
     def isAdj(self, v1, v2) -> bool:
-        """ Returns True if @param v1 and @param v2 are Neighboors,
-            False otherwise."""
+        """ 
+            @param v1: Id of Vertice.
+            @param v2: Id of Vertice.
+            Returns True if @v1 and @v2 are Neighboors,
+            False otherwise.
+        """
         try:
             self.adj[v1][v2]
             return True
@@ -113,10 +144,17 @@ class Graph(Vertice, Edge):
             return False
 
     def getAdj(self, vId) -> list: #list contains vertice Ids
+        """ 
+            @param vId: Id of Vertice.
+            @Returns List of Neighboor Ids.
+        """
         return [v.id for v in self.__getAdj(vId)]
 
     def exists(self, object) -> bool:
-        """ Check if an """
+        """ 
+            Check if an object exists in Graph, Edge or Vertice.
+            Edges will be determined by a tuple structure.
+        """
         if isinstance(object,tuple):
             return object in self.edges
         else:
@@ -126,10 +164,18 @@ class Graph(Vertice, Edge):
 #       Private Functions
 # --------------------------------- 
     def __getAdj(self, vId) -> List[Vertice]: #of type Vertice
-        """ Returns a list of Neighboors of @param vId"""
+        """ 
+            @param vId: Id of Vertice.
+            @Returns List of Neighboor Vertices.
+        """
         return self.adj[vId].values()
     
     def __addAdj(self, v1, v2):
+        """ 
+            @param v1: Id of Vertice.
+            @param v2: Id of Vertice.
+            Updates the Neighboor Dictionary according to the edge (@v1,@v2)
+        """        
         if v1 in self.adj:
             self.adj[v1][v2] = self.vertices[v2]
         else:
@@ -162,6 +208,13 @@ class Graph(Vertice, Edge):
         return list(self.vertices.keys())
 
     def _dijkstra_Init(self, init):
+        """
+            Initializes Graph for Dijkstra Algorithem.
+            @param init: Id of inital Vertice
+            1. Mark all vertices as unvisited (Color.white)
+            2. Set distances of all vertices to  infinity
+            3. Set distance of initial Vertice to 0
+        """
         for v in self.vertices.values():
             v.unvisit()
             v.distance = math.inf

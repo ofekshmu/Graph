@@ -10,8 +10,8 @@ def test_session_one():
     print(g)
     assert g.addEdge(1,4) # non existing
     assert g.addEdge(3,5)
-    assert g.addEdge(1,2) # existing
-    assert g.addEdge(4,3)
+    assert not g.addEdge(1,2) # existing
+    assert not g.addEdge(4,3)
     assert not g.addEdge(5,7)  # not valid
     assert not g.addEdge(9,6)
     assert g.addVertice(6) # valid
