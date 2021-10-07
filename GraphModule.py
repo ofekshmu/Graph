@@ -36,12 +36,6 @@ class Graph(Vertice, Edge):
             self.vertices[vId] = Vertice(vId)
             self.adj[vId] = {}
             return True
-
-    def _addAdj(self, v1, v2):
-        if v1 in self.adj:
-            self.adj[v1][v2] = self.vertices[v2]
-        else:
-            self.adj[v1] = {v2: self.vertices[v2]}
         
     def addEdge(self, v1, v2, weight = 1) -> bool:
         result = False
@@ -49,7 +43,7 @@ class Graph(Vertice, Edge):
         
         if c1 and c2 :
             self.edges[(v1,v2)] = Edge(v1,v2,weight)
-            self._addAdj(v1,v2)
+            self.__addAdj(v1,v2)
             result = True
 
         if not c1:
@@ -59,7 +53,7 @@ class Graph(Vertice, Edge):
         
         return result
 
-    def forceEdge(self, v1, v2, weight = 1):
+    def forceEdge(self, v1, v2, weight = 1) -> bool:
         if not self.exists((v1,v2)):    
             c1, c2 = self.exists(v1), self.exists(v2)
 
@@ -72,7 +66,7 @@ class Graph(Vertice, Edge):
                 self.debuger("forceEdge",f"Vertice {v2} was forced.")        
     
             self.edges[(v1,v2)] = Edge(v1,v2,weight)
-            self._addAdj(v1,v2)
+            self.___addAdj(v1,v2)
             return True
         self.debuger("forceEdge",f"Edge ({v1},{v2}) already exists.")        
         return False
@@ -121,22 +115,12 @@ class Graph(Vertice, Edge):
     def getAdj(self, vId) -> list: #list contains vertice Ids
         return [v.id for v in self.__getAdj(vId)]
 
-    def exists(self, object) -> bool: #TODO change implemantation
+    def exists(self, object) -> bool:
+        """ Check if an """
         if isinstance(object,tuple):
             return object in self.edges
         else:
             return object in self.vertices
-
-    def __repr__(self):
-        str = "\nGraph:\n"
-        for vId in self.vertices.keys():
-            str += f"\t{vId} -->  "
-            for vId2 in self.adj[vId].keys():
-                str += f"{vId2}, "
-            str = str[:-2]
-            str += "\n"
-
-        return str
 
 # --------------------------------- 
 #       Private Functions
@@ -144,6 +128,12 @@ class Graph(Vertice, Edge):
     def __getAdj(self, vId) -> List[Vertice]: #of type Vertice
         """ Returns a list of Neighboors of @param vId"""
         return self.adj[vId].values()
+    
+    def __addAdj(self, v1, v2):
+        if v1 in self.adj:
+            self.adj[v1][v2] = self.vertices[v2]
+        else:
+            self.adj[v1] = {v2: self.vertices[v2]}    
 
 # --------------------------------- 
 #       Vertice related Functions
@@ -182,4 +172,13 @@ class Graph(Vertice, Edge):
         if self.debug: 
             print("\n",10*'~ ',f" Message in Graph Infrustructure -> {function} ",10*'~ ',"\n",message,"\n")
 
+    def __repr__(self):
+        str = "\nGraph:\n"
+        for vId in self.vertices.keys():
+            str += f"\t{vId} -->  "
+            for vId2 in self.adj[vId].keys():
+                str += f"{vId2}, "
+            str = str[:-2]
+            str += "\n"
 
+        return str

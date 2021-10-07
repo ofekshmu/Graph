@@ -59,7 +59,7 @@ class Vertice:
     def __eq__(self, other): # equality is determined by id only
         if other is None:
             return False
-        return self.__id == other.id
+        return self.__id
         
     def __repr__(self):
         return f"'{self.__id}'"
