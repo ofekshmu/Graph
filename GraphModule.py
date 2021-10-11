@@ -160,6 +160,18 @@ class Graph(Vertice, Edge):
         else:
             return object in self.vertices
 
+    #TODO: test
+    def setWeights(self, dict: dict) -> bool:
+        """
+            @param dict: a dictionary containing pairs of edges as keys,
+            where edges are represented as tuples, and weights as values,
+            where values are represented numerical types.
+            Sets the given weights to the edges.
+        """
+        for e, w in dict.items():
+            self.setWeight(e[0], e[1], w)
+        #TODO:when should i return false?
+        return True
 # --------------------------------- 
 #       Private Functions
 # --------------------------------- 
@@ -198,6 +210,8 @@ class Graph(Vertice, Edge):
     def getWeight(self, v1, v2):
         return self.edges[(v1,v2)].weight
 
+    def setWeight(self, v1, v2, weight):
+        self.edges[(v1, v2)].weight = weight
 # --------------------------------- 
 #       Extensions related Functions
 # ---------------------------------   
