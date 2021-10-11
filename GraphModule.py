@@ -34,7 +34,7 @@ class Graph(Vertice, Edge):
             return False
         else:
             self.__vertices[vId] = Vertice(vId)
-            self.__adj[vId] = {} #TODO
+            self.__adj[vId] = {} 
             return True
         
     def addEdge(self, v1, v2, weight = 1) -> bool:
@@ -105,20 +105,6 @@ class Graph(Vertice, Edge):
             return False
         return True
     
-    # def popVertice(self, vId) -> bool: #TODO impl func to check if vertice is slo
-    #     # check if edges are attached
-    #     e = self.adj.get(vId, default = None)
-    #     # TODO:what about edges pointing to self?
-    #     if e != None:
-    #         self.debuger("popVertice",f"{vId} was not removed, {e} is attached to it")
-    #         return False
-
-    #     if self.edges.pop(vId ,None) == None:
-    #         self.debuger("popEdge",f"Vertice with an id {vId} does not exist.")
-    #         return False
-
-    #     return True
-    
     def getUnvisited(self, vId = None) -> list: #list contains vertice Ids
         """
             @param vId: Id of Vertice.
@@ -169,8 +155,9 @@ class Graph(Vertice, Edge):
             Sets the given weights to the edges.
         """
         for e, w in dict.items():
-            self.setWeight(e[0], e[1], w)
-        #TODO:when should i return false?
+            if not self.setWeight(e[0], e[1], w):
+                self.debuger("setWeights",f"{e} was not found in graph.")
+                return False
         return True
 # --------------------------------- 
 #       Private Functions
