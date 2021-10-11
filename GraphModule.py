@@ -14,9 +14,9 @@ class Graph(Vertice, Edge):
         self.debug = debug
         self.directed = directed
         #structures
-        self.vertices = {}
-        self.edges = {}
-        self.adj = {}
+        self.__vertices = {}
+        self.__edges = {}
+        self.__adj = {}
 
         for vId in vertices:
             self.addVertice(vId)
@@ -33,8 +33,8 @@ class Graph(Vertice, Edge):
             self.debuger("addVertice",f"Failed inserting '{vId}', a vertice with id {vId} already exists.")
             return False
         else:
-            self.vertices[vId] = Vertice(vId)
-            self.adj[vId] = {}
+            self.__vertices[vId] = Vertice(vId)
+            self.__adj[vId] = {} #TODO
             return True
         
     def addEdge(self, v1, v2, weight = 1) -> bool:
@@ -53,7 +53,7 @@ class Graph(Vertice, Edge):
             if self.exists((v1,v2)):
                 self.debuger("addEdge",f"Edge ({v1},{v2}), already exists!.")   
             else:
-                self.edges[(v1,v2)] = Edge(v1,v2,weight)
+                self.__edges[(v1,v2)] = Edge(v1,v2,weight)
                 self.__addAdj(v1,v2)
                 result = True
 
@@ -84,7 +84,7 @@ class Graph(Vertice, Edge):
                 self.addVertice(v2)
                 self.debuger("forceEdge",f"Vertice {v2} was forced.")        
     
-            self.edges[(v1,v2)] = Edge(v1,v2,weight)
+            self.__edges[(v1,v2)] = Edge(v1,v2,weight)
             self.__addAdj(v1,v2)
             return True
         self.debuger("forceEdge",f"Edge ({v1},{v2}) already exists.")        
@@ -95,13 +95,13 @@ class Graph(Vertice, Edge):
             @param e: an Edge in a tuple form: (v1,v2).
             Removes edge @e from graph and returns True if succesfell
         """
-        if self.edges.pop(e,None) == None:
+        if self.__edges.pop(e,None) == None:
             self.debuger("popEdge",f"Edge with an id {e} does not exist.")
             return False
         
         #remove from adj:
         (v1, v2) = e
-        if self.adj[v1].pop(v2, None) == None:
+        if self.__adj[v1].pop(v2, None) == None:
             return False
         return True
     
@@ -126,7 +126,7 @@ class Graph(Vertice, Edge):
             than returns all Unvisited Vertices Ids in the graph.
         """
         if vId is None:
-            return [v.id for v in self.vertices.values() if v.isUnvisited()]
+            return [v.id for v in self.__vertices.values() if v.isUnvisited()]
         adj = self.__getAdj(vId)
         return [v.id for v in adj if v.isUnvisited()]
 
@@ -138,7 +138,7 @@ class Graph(Vertice, Edge):
             False otherwise.
         """
         try:
-            self.adj[v1][v2]
+            self.__adj[v1][v2]
             return True
         except KeyError:
             return False
@@ -156,9 +156,9 @@ class Graph(Vertice, Edge):
             Edges will be determined by a tuple structure.
         """
         if isinstance(object,tuple):
-            return object in self.edges
+            return object in self.__edges
         else:
-            return object in self.vertices
+            return object in self.__vertices
 
     #TODO: test
     def setWeights(self, dict: dict) -> bool:
@@ -180,7 +180,7 @@ class Graph(Vertice, Edge):
             @param vId: Id of Vertice.
             @Returns List of Neighboor Vertices.
         """
-        return self.adj[vId].values()
+        return self.__adj[vId].values()
     
     def __addAdj(self, v1, v2):
         """ 
@@ -188,38 +188,55 @@ class Graph(Vertice, Edge):
             @param v2: Id of Vertice.
             Updates the Neighboor Dictionary according to the edge (@v1,@v2)
         """        
-        if v1 in self.adj:
-            self.adj[v1][v2] = self.vertices[v2]
+        if v1 in self.__adj:
+            self.__adj[v1][v2] = self.__vertices[v2]
         else:
-            self.adj[v1] = {v2: self.vertices[v2]}    
+            self.__adj[v1] = {v2: self.__vertices[v2]}    
 
 # --------------------------------- 
 #       Vertice related Functions
 # ---------------------------------     
     def getDistance(self, vId):
-        return self.vertices[vId].distance
+        if self.exists(vId):
+            return self.__vertices[vId].distance
+        else:
+            raise KeyError(f"In GraphModule -> getDistnace: {vId} not found.")
     
-    def setDistance(self, vId, d):
-        self.vertices[vId].distance = d
+    def setDistance(self, vId, d) -> bool:
+        if self.exists(vId):
+            self.__vertices[vId].distance = d
+            return True
+        else:
+            self.debuger(f"In GraphModule -> setDistnace:", f"{vId} not found.")
+            return False            
 
     def visit(self, vId):
-        self.vertices[vId].color = Color.gray
+        self.__vertices[vId].color = Color.gray
 # --------------------------------- 
 #       Edge related Functions
 # ---------------------------------      
     def getWeight(self, v1, v2):
-        return self.edges[(v1,v2)].weight
-
+        if self.exists((v1,v2)):
+            return self.__edges[(v1,v2)].weight
+        else:
+            raise KeyError(f"In GraphModule -> getWeight: {(v1,v2)} not found.")
+          
     def setWeight(self, v1, v2, weight):
-        self.edges[(v1, v2)].weight = weight
+        if self.exists((v1, v2)):
+            self.__edges[(v1, v2)].weight = weight
+            return True
+        else:
+            self.debuger(f"In GraphModule -> setWeight:", f"{(v1, v2)} not found.")
+            return False            
+
 # --------------------------------- 
 #       Extensions related Functions
 # ---------------------------------   
     def _getEdges(self):
-        return list(self.edges.values())
+        return list(self.__edges.values())
     
     def _getVerticeIds(self):
-        return list(self.vertices.keys())
+        return list(self.__vertices.keys())
 
     def _dijkstra_Init(self, init):
         """
@@ -229,10 +246,10 @@ class Graph(Vertice, Edge):
             2. Set distances of all vertices to  infinity
             3. Set distance of initial Vertice to 0
         """
-        for v in self.vertices.values():
+        for v in self.__vertices.values():
             v.unvisit()
             v.distance = math.inf
-        self.vertices[init].distance = 0
+        self.__vertices[init].distance = 0
 #---------------------------------------
     
     def debuger(self, function :str, message :str):
@@ -241,9 +258,9 @@ class Graph(Vertice, Edge):
 
     def __repr__(self):
         str = "\nGraph:\n"
-        for vId in self.vertices.keys():
+        for vId in self.__vertices.keys():
             str += f"\t{vId} -->  "
-            for vId2 in self.adj[vId].keys():
+            for vId2 in self.__adj[vId].keys():
                 str += f"{vId2}, "
             str = str[:-2]
             str += "\n"

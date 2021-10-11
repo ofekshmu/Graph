@@ -1,6 +1,5 @@
 from typing import Union
-
-
+import math
 class Edge:
     def __init__(self, start, end, weight: int = 1):
         self.__start = start
@@ -26,11 +25,22 @@ class Edge:
     @weight.setter
     def weight(self, new_Weight: Union[int, float]):
         """ resets the value of weight to @new_Weight"""
-        self.__weight = new_Weight
+        try:
+            if new_Weight != math.inf: 
+                int(new_Weight)
+            self.__weight = new_Weight
+        except:
+            raise ValueError("None numeric value was given for Edge Weight") 
 
     def _accWeight(self, acc_Weight):
         """ adds @acc_Weight to the current edge weight"""
-        self.__weight += acc_Weight
+        try:
+            if acc_Weight != math.inf: 
+                int(acc_Weight)
+            self.__weight += acc_Weight
+        except:
+            raise ValueError("None numeric value was given for Edge accWeight") 
+
     # ETC
     def isLoop(self) -> bool:
         return self.__start == self.__end

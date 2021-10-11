@@ -33,7 +33,7 @@ class Vertice:
         if isinstance(color, Color):
             self.__color = color
         else:
-            raise ValueError
+            raise ValueError("Enum of type Color was not given to Vertice.")
     
     @property    
     def distance(self):
@@ -43,11 +43,21 @@ class Vertice:
     @distance.setter
     def distance(self, new_distance : Union[float, int]):
         """ set the distnace of the vertice"""
-        self.__distance = new_distance
-    
+        try:
+            if new_distance != math.inf: 
+                int(new_distance)
+            self.__distance = new_distance
+        except:
+            raise ValueError("None numeric value was given for Vertice Distance") 
+
     def _accDistance(self, acc_distance : Union[float, int]):
         """ accumulate to the current distance of the vertice """
-        self.__distance += acc_distance
+        try:
+            if acc_distance != math.inf: 
+                int(acc_distance)
+            self.__distance += acc_distance
+        except:
+            raise ValueError("None numeric value was given for Vertice accDistance") 
 
     def isUnvisited(self):
         return self.color == Color.white
