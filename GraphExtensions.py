@@ -92,8 +92,11 @@ from Vertice import Color
 import math
 class BFS(Graph):
     
+    __graph = None
+
     @staticmethod
     def run(g: Graph, sId):
+        BFS.__graph = g
         # --------- Initialize -----------
         vertices = g._getVerticeIds()
         for vId in vertices:
@@ -119,11 +122,18 @@ class BFS(Graph):
             q.dequeue() #uId
             g.color(uId, Color.black)
 
-    def print(self):
-        pass
+    @staticmethod
+    def path(vId):
+        if BFS.__graph is not None:
+            path = [vId]
+            pId = BFS.__graph.getPredecessor(vId)
+            while pId is not None:
+                path.insert(0, pId)
+                pId = BFS.__graph.getPredecessor(pId)
+            return path
+        else:
+            print(f"ERROR: Message in GraphExtensions: Please run the BFS first!")
 
-    def path(self, vId):
-        pass
         
 
 

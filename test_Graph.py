@@ -59,3 +59,17 @@ def test_dijkstra():
     assert Path.dijkstra(g,2,5) == math.inf
     assert Path.dijkstra(g,3,5) == 2
     print(g)
+
+from GraphExtensions import BFS
+
+def test_bfs():
+    g = Graph(vertices=[1,2,3,4,5],edges=[(1,2),(1,3),(4,5),(2,3),(3,4)],directed=True,debug=True)
+    print(g)
+    BFS.run(g, 1)
+    for vId in g._getVerticeIds():
+        print(f"Path to {vId} is: ",BFS.path(vId))
+    BFS.run(g, 2)
+    for vId in g._getVerticeIds():
+        print(f"Path to {vId} is: ",BFS.path(vId))
+
+    #bug at path to 1 when starting from 2, lok into it

@@ -217,6 +217,9 @@ class Graph(Vertice, Edge):
 
     def setPredecessor(self, vId, pId):
         self.__vertices[vId].predecessor = pId
+
+    def getPredecessor(self, vId):
+        return self.__vertices[vId].predecessor
 # --------------------------------- 
 #       Edge related Functions
 # ---------------------------------      
