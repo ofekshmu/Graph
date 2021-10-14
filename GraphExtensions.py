@@ -87,8 +87,5 @@ class Path(Graph):
         if debug: print("\ndijkstra debugger ended.\n",20*"- ")
         return g.getDistance(end)
 
-
-# what about setting edges weight
-
             
 
