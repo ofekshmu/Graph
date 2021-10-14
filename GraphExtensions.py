@@ -87,5 +87,45 @@ class Path(Graph):
         if debug: print("\ndijkstra debugger ended.\n",20*"- ")
         return g.getDistance(end)
 
+from QueueModule import Queue
+from Vertice import Color
+import math
+class BFS(Graph):
+    
+    @staticmethod
+    def run(g: Graph, sId):
+        # --------- Initialize -----------
+        vertices = g._getVerticeIds()
+        for vId in vertices:
+            if vId != sId:
+                g.color(vId, Color.white)
+                g.setDistance(vId, math.inf)  
+            else:
+                g.color(sId, Color.gray)
+                g.setDistance(sId, 0)
+            g.setPredecessor(vId, None)
+        #----------------------------------
+        q = Queue()
+        q.enqueue(sId)
+        while not q.isEmpty():
+            uId = q.head()
+            adjList = g.getAdj(uId)
+            for vId in adjList:
+                if g.getColor(vId) == Color.white:
+                    g.color(vId, Color.gray)
+                    g.setDistance(vId, g.getDistance(uId) + g.getWeight(uId, vId))
+                    g.setPredecessor(vId, pId=uId)
+                    q.enqueue(vId)
+            q.dequeue() #uId
+            g.color(uId, Color.black)
+
+    def print(self):
+        pass
+
+    def path(self, vId):
+        pass
+        
+
+
             
 

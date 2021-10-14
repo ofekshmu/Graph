@@ -132,7 +132,7 @@ class Graph(Vertice, Edge):
     def getAdj(self, vId) -> list: #list contains vertice Ids
         """ 
             @param vId: Id of Vertice.
-            @Returns List of Neighboor Ids.
+            @returns List of Neighboor Ids.
         """
         return [v.id for v in self.__getAdj(vId)]
 
@@ -199,6 +199,24 @@ class Graph(Vertice, Edge):
 
     def visit(self, vId):
         self.__vertices[vId].color = Color.gray
+
+    def color(self, vId, color):
+        """
+            @param vId: Vertice id
+            @param color: Verice color
+            Colors the vertice in @color
+        """
+        self.__vertices[vId].color = color
+    
+    def getColor(self, vId):
+        """
+            @param vId: Vertice Id
+            get the color of the vertice.
+        """
+        return self.__vertices[vId].color
+
+    def setPredecessor(self, vId, pId):
+        self.__vertices[vId].predecessor = pId
 # --------------------------------- 
 #       Edge related Functions
 # ---------------------------------      
@@ -237,6 +255,9 @@ class Graph(Vertice, Edge):
             v.unvisit()
             v.distance = math.inf
         self.__vertices[init].distance = 0
+
+
+
 #---------------------------------------
     
     def debuger(self, function :str, message :str):

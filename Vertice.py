@@ -12,6 +12,7 @@ class Vertice:
         self.__id = id
         self.__color = Color.white
         self.__distance = math.inf
+        self.__predecessor = None
 
     # GETTERS
     @property
@@ -49,6 +50,14 @@ class Vertice:
             self.__distance = new_distance
         except:
             raise ValueError("None numeric value was given for Vertice Distance") 
+
+    @property
+    def predecessor(self):
+        return self.__predecessor
+
+    @predecessor.setter
+    def predecessor(self, pId):
+        self.__predecessor = pId
 
     def _accDistance(self, acc_distance : Union[float, int]):
         """ accumulate to the current distance of the vertice """
