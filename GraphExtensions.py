@@ -93,10 +93,17 @@ import math
 class BFS(Graph):
     
     __graph = None
+    __start = None
 
     @staticmethod
     def run(g: Graph, sId):
+        """
+            BFS algorithem for graphs.
+            @param g: graph
+            @param sId: Id of the start node in the algorithem 
+        """
         BFS.__graph = g
+        BFS.__start = sId
         # --------- Initialize -----------
         vertices = g._getVerticeIds()
         for vId in vertices:
@@ -124,13 +131,24 @@ class BFS(Graph):
 
     @staticmethod
     def path(vId):
+        """
+            Upon receiveing an Id of a vertive, returns the path from the start veritce
+            stated in BFS.run to the given id.
+            if no path exists, inf will be returned.
+            if a trivial path exists, None is returned.
+            Note: BFS.run should be used before this function.
+        """
         if BFS.__graph is not None:
-            path = [vId]
-            pId = BFS.__graph.getPredecessor(vId)
-            while pId is not None:
-                path.insert(0, pId)
-                pId = BFS.__graph.getPredecessor(pId)
-            return path
+            if BFS.__start == vId:
+                print(f"Message in BFS.path: Path to from {BFS.__start} to {vId} is trivival;\nNone will be returned.")
+
+            else:
+                pId = BFS.__graph.getPredecessor(vId)
+                path = [vId] if pId is not None else math.inf
+                while pId is not None:
+                    path.insert(0, pId)
+                    pId = BFS.__graph.getPredecessor(pId)
+                return path
         else:
             print(f"ERROR: Message in GraphExtensions: Please run the BFS first!")
 

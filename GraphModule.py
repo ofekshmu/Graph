@@ -219,7 +219,10 @@ class Graph(Vertice, Edge):
         self.__vertices[vId].predecessor = pId
 
     def getPredecessor(self, vId):
-        return self.__vertices[vId].predecessor
+        if self.exists(vId):
+            return self.__vertices[vId].predecessor
+        else:
+            raise KeyError(f"{vId} not found while trying to get Predecessor.")    
 # --------------------------------- 
 #       Edge related Functions
 # ---------------------------------      

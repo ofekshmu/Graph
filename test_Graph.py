@@ -65,11 +65,15 @@ from GraphExtensions import BFS
 def test_bfs():
     g = Graph(vertices=[1,2,3,4,5],edges=[(1,2),(1,3),(4,5),(2,3),(3,4)],directed=True,debug=True)
     print(g)
+    BFS.path(1)
     BFS.run(g, 1)
     for vId in g._getVerticeIds():
         print(f"Path to {vId} is: ",BFS.path(vId))
     BFS.run(g, 2)
     for vId in g._getVerticeIds():
         print(f"Path to {vId} is: ",BFS.path(vId))
-
+    try:
+        print(BFS.path(10))
+    except KeyError:
+        print("Cought Error.")
     #bug at path to 1 when starting from 2, lok into it
