@@ -44,7 +44,7 @@ class AdjMatrix(Graph):
             out_str += "\n"
         return out_str
 
-class Path(Graph):
+class Dijkstra(Graph):
 
     #PRIVATE -  not part of API
     def __dijkstraRec(g: Graph, init, end, debug, itr):
@@ -71,10 +71,10 @@ class Path(Graph):
         g.visit(init)
         for v in unvisited:
             if v != end:
-                Path.__dijkstraRec(g, v, end, debug, itr +1)        
+                Dijkstra.__dijkstraRec(g, v, end, debug, itr +1)        
 
     @staticmethod
-    def dijkstra(g: Graph, init, end, debug = False):
+    def run(g: Graph, init, end, debug = False):
         """
             @param g : object of Type Graph.
             @param init: Id of first Vertice in path.
@@ -83,7 +83,7 @@ class Path(Graph):
             @Returns the minimal distance from @init to @end, if no path was found, returns math.inf.     
         """
         g._dijkstra_Init(init)
-        Path.__dijkstraRec(g, init, end, debug, 0)
+        Dijkstra.__dijkstraRec(g, init, end, debug, 0)
         if debug: print("\ndijkstra debugger ended.\n",20*"- ")
         return g.getDistance(end)
 
