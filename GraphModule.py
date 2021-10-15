@@ -53,8 +53,14 @@ class Graph(Vertice, Edge):
             if self.exists((v1,v2)):
                 self.debuger("addEdge",f"Edge ({v1},{v2}), already exists!.")   
             else:
-                self.__edges[(v1,v2)] = Edge(v1,v2,weight)
+                e = Edge(v1,v2,weight)
+                if not self.directed:
+                    e = e.bi()
+                    self.__addAdj(v2,v1)
+                
                 self.__addAdj(v1,v2)
+                self.__edges[(v1,v2)] = e
+
                 result = True
 
         if not c1:
@@ -142,6 +148,11 @@ class Graph(Vertice, Edge):
             Edges will be determined by a tuple structure.
         """
         if isinstance(object,tuple):
+            (v1,v2) = object
+            if not self.directed:
+                cond1 = object in self.__edges
+                cond2 = (v2,v1) in self.__edges
+                return cond1 or cond2
             return object in self.__edges
         else:
             return object in self.__vertices

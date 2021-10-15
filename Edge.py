@@ -5,8 +5,16 @@ class Edge:
         self.__start = start
         self.__end = end
         self.__weight = weight
+        self.__biDirectional = False
 
     # Getters
+    def bi(self, state: bool = True):
+        self.__biDirectional = state
+        return self
+    
+    def isBi(self) -> bool:
+        return self.__biDirectional
+
     @property
     def start(self):
         """ get starting vertice Id"""
