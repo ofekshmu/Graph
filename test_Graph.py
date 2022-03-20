@@ -1,4 +1,4 @@
-from GraphExtensions import AdjMatrix, Dijkstra
+from GraphExtensions import AdjMatrix, Dijkstra, Oiler
 from GraphModule import Graph
 import math
 
@@ -77,3 +77,14 @@ def test_bfs():
     except KeyError:
         print("Cought Error.")
     #bug at path to 1 when starting from 2, lok into it
+
+def test_Oiler():
+    g = Graph(vertices=[1,2,3],edges=[(1,2),(2,3),(3,1)],debug=True)
+    print(Oiler.CountOiler(g, 3))
+
+#test_session_one()
+#test_session_two()
+#test_adjMatrix()
+#test_dijkstra()
+#test_bfs()
+test_Oiler()

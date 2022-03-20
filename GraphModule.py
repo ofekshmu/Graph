@@ -262,8 +262,6 @@ class Graph(Vertice, Edge):
             v.distance = math.inf
         self.__vertices[init].distance = 0
 
-
-
 #---------------------------------------
     
     def debuger(self, function :str, message :str):

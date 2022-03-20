@@ -152,7 +152,50 @@ class BFS(Graph):
         else:
             print(f"ERROR: Message in GraphExtensions: Please run the BFS first!")
 
-        
+
+class Oiler(Graph):
+
+    def __CountOilerRecursive(g : Graph, k, vId, flag):
+        sum = 0
+        if g.getColor(vId) == Color.black and \
+            k == 0 and flag :
+            return 1
+        elif g.getColor(vId) != Color.black and \
+            k > 0:
+            for wId in g.getAdj(vId):
+                temp = 0
+                if g.getColor(wId) == Color.gray and flag == False:
+                    temp += Oiler.__CountOilerRecursive(g, k-1, wId, False)
+                else:
+                    g.color(wId, Color.gray)
+                    temp += Oiler.__CountOilerRecursive(g, k-1, wId, True)
+                if temp == 0:
+                    g.color(wId, Color.white)
+                else:
+                    sum += temp
+        return sum
+
+
+    @staticmethod
+    def CountOiler(g : Graph, k : int):
+        sum = 0
+        verticeList = g._getVerticeIds()
+        # Initialize vertices
+        for vId in verticeList:
+            g.color(vId, Color.white)
+        for vId in verticeList:
+            g.color(vId, Color.black)
+            # initialize Gray Vertice if were created in last iteration 
+            for wId in verticeList:
+                if g.getColor(wId) == Color.gray:
+                    g.color(wId, Color.white)
+            # iterate trough neigboors
+            for wId in g.getAdj(wId):
+                if g.getColor(wId) == Color.gray:
+                    sum += Oiler.__CountOilerRecursive(g, k-1, wId, False)
+                if g.getColor(wId) == Color.white:
+                    sum += Oiler.__CountOilerRecursive(g, k-1, wId, True)
+        return sum
 
 
             
