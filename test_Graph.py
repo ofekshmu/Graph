@@ -79,7 +79,13 @@ def test_bfs():
     #bug at path to 1 when starting from 2, lok into it
 
 def test_Oiler():
-    g = Graph(vertices=[1,2,3],edges=[(1,2),(2,3),(3,1)],debug=True)
+    #te = [(i,j) for i in range(1,8) for j in range(1,8) if i != j]
+    #print(te)
+    e1 = [(1,2),(1,3),(1,4),(1,5),(1,6),(2,5),(2,7),(3,4),(3,5),(3,7),(4,5),(4,6),(4,7),(5,6),(5,7),(6,7)]
+    #e1 = [(1,2),(2,3),(3,1),(1,4),(4,2)]
+    e2 = [ (t[1],t[0]) for t in e1]
+    g = Graph(vertices=[1,2,3,4,5,6,7],edges= e1 + e2,debug=True)
+    print(g)
     print(Oiler.CountOiler(g, 3))
 
 #test_session_one()

@@ -152,27 +152,35 @@ class BFS(Graph):
         else:
             print(f"ERROR: Message in GraphExtensions: Please run the BFS first!")
 
-
+DEBUG = False
 class Oiler(Graph):
 
     def __CountOilerRecursive(g : Graph, k, vId, flag):
         sum = 0
-        if g.getColor(vId) == Color.black and \
-            k == 0 and flag :
-            return 1
+        if g.getColor(vId) == Color.black:
+            if k == 0 and flag :
+                if DEBUG : print(f"Circle Found Upon reaching {vId}")
+                return 1
+            else:
+                return 0
         elif g.getColor(vId) != Color.black and \
             k > 0:
             for wId in g.getAdj(vId):
                 temp = 0
-                if g.getColor(wId) == Color.gray and flag == False:
-                    temp += Oiler.__CountOilerRecursive(g, k-1, wId, False)
+                if g.getColor(wId) != Color.white:
+                    if DEBUG : print(f"Recursive Call with {k-1} {wId} {flag}")
+                    temp += Oiler.__CountOilerRecursive(g, k-1, wId, flag)
                 else:
-                    g.color(wId, Color.gray)
-                    temp += Oiler.__CountOilerRecursive(g, k-1, wId, True)
-                if temp == 0:
-                    g.color(wId, Color.white)
-                else:
-                    sum += temp
+                    if g.getColor(wId) == Color.white:
+                        if DEBUG : print(f"{wId} was colored GRAY, Recursive Call with {k-1} {wId} True")
+                        g.color(wId, Color.gray)
+                        if DEBUG : print(f"Recursive Call with {k-1} {wId} True")
+                        temp += Oiler.__CountOilerRecursive(g, k-1, wId, True)
+                        if temp == 0:
+                            if DEBUG : print(f"{wId} was turned back to WHITE")
+                            g.color(wId, Color.white)
+                # if black do NOTHING
+                sum += temp
         return sum
 
 
@@ -184,17 +192,28 @@ class Oiler(Graph):
         for vId in verticeList:
             g.color(vId, Color.white)
         for vId in verticeList:
+            if DEBUG : print(f"Starting search from {vId}, he is now BLACK")
             g.color(vId, Color.black)
             # initialize Gray Vertice if were created in last iteration 
             for wId in verticeList:
                 if g.getColor(wId) == Color.gray:
                     g.color(wId, Color.white)
             # iterate trough neigboors
-            for wId in g.getAdj(wId):
+            for wId in g.getAdj(vId):
+                temp = 0
                 if g.getColor(wId) == Color.gray:
-                    sum += Oiler.__CountOilerRecursive(g, k-1, wId, False)
+                    if DEBUG : print(f"Recursive Call with {k-1} {wId} False")
+                    temp += Oiler.__CountOilerRecursive(g, k-1, wId, False)
                 if g.getColor(wId) == Color.white:
-                    sum += Oiler.__CountOilerRecursive(g, k-1, wId, True)
+                    g.color(wId, Color.gray)
+                    if DEBUG : print(f"{wId} was colored GRAY, Recursive Call with {k-1} {wId} True")
+                    temp += Oiler.__CountOilerRecursive(g, k-1, wId, True)
+                    if temp == 0:
+                        if DEBUG : print(f"{wId} was turned back to WHITE")
+                        g.color(wId, Color.white)
+                # if black do NOTHING
+                sum += temp
+                if DEBUG : print(f"Current Values of sum is: {sum}")
         return sum
 
 
