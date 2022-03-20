@@ -152,7 +152,7 @@ class BFS(Graph):
         else:
             print(f"ERROR: Message in GraphExtensions: Please run the BFS first!")
 
-DEBUG = False
+DEBUG = True
 class Oiler(Graph):
 
     def __CountOilerRecursive(g : Graph, k, vId, flag):
@@ -163,6 +163,8 @@ class Oiler(Graph):
                 return 1
             else:
                 return 0
+        elif g.getColor(vId) == Color.purple:
+            return 0
         elif g.getColor(vId) != Color.black and \
             k > 0:
             for wId in g.getAdj(vId):
@@ -213,7 +215,9 @@ class Oiler(Graph):
                         g.color(wId, Color.white)
                 # if black do NOTHING
                 sum += temp
-                if DEBUG : print(f"Current Values of sum is: {sum}")
+                if DEBUG : print(f" ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  Current Values of sum is: {sum}")
+            if DEBUG : print(f" # # # # # # # # # # # # # {vId} is now Purple - Current Value of sum is {sum}")            
+            g.color(vId, Color.purple)
         return sum
 
 

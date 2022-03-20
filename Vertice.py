@@ -6,6 +6,7 @@ class Color(Enum):
     black = "black",
     gray = "gray",
     white = "white"
+    purple = "purple"
 
 class Vertice:
     def __init__(self, id):       
