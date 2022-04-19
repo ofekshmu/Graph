@@ -182,7 +182,12 @@ class Graph(Vertice, Edge):
 
 # --------------------------------- 
 #       Vertice related Functions
-# ---------------------------------     
+# ---------------------------------
+# 
+# #
+    def getVCount(self) -> int:
+        return len(self.__vertices)
+
     def getDistance(self, vId):
         if self.exists(vId):
             return self.__vertices[vId].distance

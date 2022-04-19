@@ -155,71 +155,56 @@ class BFS(Graph):
 DEBUG = True
 class Oiler(Graph):
 
-    def __CountOilerRecursive(g : Graph, k, vId, flag):
-        sum = 0
-        if g.getColor(vId) == Color.black:
-            if k == 0 and flag :
-                if DEBUG : print(f"Circle Found Upon reaching {vId}")
-                return 1
+    def DFS(graph, marked, n, vert, start, count):
+    
+        # mark the vertex vert as visited
+        marked[vert] = True
+    
+        # if the path of length (n-1) is found
+        if n == 0:
+    
+            # mark vert as un-visited to make
+            # it usable again.
+            marked[vert] = False
+    
+            # Check if vertex vert can end with
+            # vertex start
+            if graph[vert][start] == 1:
+                count = count + 1
+                return count
             else:
-                return 0
-        elif g.getColor(vId) == Color.purple:
-            return 0
-        elif g.getColor(vId) != Color.black and \
-            k > 0:
-            for wId in g.getAdj(vId):
-                temp = 0
-                if g.getColor(wId) != Color.white:
-                    if DEBUG : print(f"Recursive Call with {k-1} {wId} {flag}")
-                    temp += Oiler.__CountOilerRecursive(g, k-1, wId, flag)
-                else:
-                    if g.getColor(wId) == Color.white:
-                        if DEBUG : print(f"{wId} was colored GRAY, Recursive Call with {k-1} {wId} True")
-                        g.color(wId, Color.gray)
-                        if DEBUG : print(f"Recursive Call with {k-1} {wId} True")
-                        temp += Oiler.__CountOilerRecursive(g, k-1, wId, True)
-                        if temp == 0:
-                            if DEBUG : print(f"{wId} was turned back to WHITE")
-                            g.color(wId, Color.white)
-                # if black do NOTHING
-                sum += temp
-        return sum
+                return count
+    
+        # For searching every possible path of
+        # length (n-1)
+        V = len(graph)
+        for i in range(V):
+            if marked[i] == False and graph[vert][i] == 1:
+    
+                # DFS for searching path by decreasing
+                # length by 1
+                count = Oiler.DFS(graph, marked, n-1, i, start, count)
+    
+        # marking vert as unvisited to make it
+        # usable again.
+        marked[vert] = False
+        return count
 
 
-    @staticmethod
-    def CountOiler(g : Graph, k : int):
-        sum = 0
-        verticeList = g._getVerticeIds()
-        # Initialize vertices
-        for vId in verticeList:
-            g.color(vId, Color.white)
-        for vId in verticeList:
-            if DEBUG : print(f"Starting search from {vId}, he is now BLACK")
-            g.color(vId, Color.black)
-            # initialize Gray Vertice if were created in last iteration 
-            for wId in verticeList:
-                if g.getColor(wId) == Color.gray:
-                    g.color(wId, Color.white)
-            # iterate trough neigboors
-            for wId in g.getAdj(vId):
-                temp = 0
-                if g.getColor(wId) == Color.gray:
-                    if DEBUG : print(f"Recursive Call with {k-1} {wId} False")
-                    temp += Oiler.__CountOilerRecursive(g, k-1, wId, False)
-                if g.getColor(wId) == Color.white:
-                    g.color(wId, Color.gray)
-                    if DEBUG : print(f"{wId} was colored GRAY, Recursive Call with {k-1} {wId} True")
-                    temp += Oiler.__CountOilerRecursive(g, k-1, wId, True)
-                    if temp == 0:
-                        if DEBUG : print(f"{wId} was turned back to WHITE")
-                        g.color(wId, Color.white)
-                # if black do NOTHING
-                sum += temp
-                if DEBUG : print(f" ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  Current Values of sum is: {sum}")
-            if DEBUG : print(f" # # # # # # # # # # # # # {vId} is now Purple - Current Value of sum is {sum}")            
-            g.color(vId, Color.purple)
-        return sum
+    def CountCycles(g : Graph, n):
 
-
-            
-
+        V = g.getVCount()
+        graph, _ = AdjMatrix.get(g)
+        # all vertex are marked un-visited initially.
+        marked = [False] * V
+    
+        # Searching for cycle by using v-n+1 vertices
+        count = 0
+        for i in range(V-(n-1)):
+            count = Oiler.DFS(graph, marked, n-1, i, i, count)
+    
+            # ith vertex is marked as visited and
+            # will not be visited again.
+            marked[i] = True
+        
+        return int(count/2)
